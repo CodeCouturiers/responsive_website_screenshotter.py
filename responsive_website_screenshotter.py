@@ -77,7 +77,13 @@ class WebsiteScreenshotter:
         self.output_dir = output_dir
         self.max_workers = max_workers
         self.setup_logging()
+
+        # Create output directory if it doesn't exist
         os.makedirs(output_dir, exist_ok=True)
+
+        # Create temp directory for checks
+        self.temp_dir = os.path.join(output_dir, 'temp')
+        os.makedirs(self.temp_dir, exist_ok=True)
 
     @staticmethod
     def setup_logging():
@@ -87,6 +93,12 @@ class WebsiteScreenshotter:
         )
 
     def get_chrome_options(self) -> Options:
+        options = self.get_base_chrome_options()
+        options.add_argument("--disable-web-security")  # Handle CORS in dev
+        options.add_argument("--allow-insecure-localhost")  # Local dev servers
+        return options
+
+    def get_base_chrome_options(self) -> Options:
         options = Options()
         options.add_argument("--headless=new")
         options.add_argument("--no-sandbox")
@@ -101,9 +113,126 @@ class WebsiteScreenshotter:
         options.page_load_strategy = 'eager'
         return options
 
+    def wait_for_page_load(self, driver: webdriver.Chrome, viewport: Viewport) -> None:
+        """Enhanced page load detection"""
+        wait = WebDriverWait(driver, 30)
+
+        # Wait for basic DOM content
+        wait.until(EC.presence_of_element_located((By.TAG_NAME, "body")))
+
+        # Wait for complete page load
+        driver.execute_script("""
+            return new Promise((resolve) => {
+                if (document.readyState === 'complete') {
+                    // Additional check for dynamic content
+                    setTimeout(() => {
+                        const content = document.body.innerHTML;
+                        if (content && content.length > 100) {
+                            resolve();
+                        } else {
+                            resolve('empty');
+                        }
+                    }, 1000);
+                } else {
+                    window.addEventListener('load', () => {
+                        setTimeout(resolve, 1000);
+                    });
+                    setTimeout(() => resolve('timeout'), 5000);
+                }
+            });
+        """)
+
+    def inject_hydration_handling(self, driver: webdriver.Chrome) -> None:
+        """Handle framework-specific elements and styling safely"""
+        driver.execute_script("""
+            // Safely check for frameworks
+            try {
+                // Handle React suspense boundaries if present
+                document.querySelectorAll('[data-reactroot]').forEach(element => {
+                    if (element.innerHTML.includes('loading')) {
+                        element.style.visibility = 'visible';
+                    }
+                });
+
+                // Ensure all styles are loaded
+                const styleSheets = Array.from(document.styleSheets);
+                styleSheets.forEach(sheet => {
+                    if (sheet.href) {
+                        const link = document.createElement('link');
+                        link.rel = 'stylesheet';
+                        link.href = sheet.href;
+                        document.head.appendChild(link);
+                    }
+                });
+            } catch (e) {
+                // Ignore errors for non-framework sites
+                console.log('Framework-specific handling skipped');
+            }
+        """)
+
+    def check_screenshot_content(self, image_path: str) -> bool:
+        """
+        Проверяет скриншот на наличие реального контента
+        Возвращает True если контент обнаружен, False если скриншот пустой/белый
+        """
+        with Image.open(image_path) as img:
+            # Конвертируем в RGB если изображение в другом формате
+            if img.mode != 'RGB':
+                img = img.convert('RGB')
+
+            # Уменьшаем изображение для быстрого анализа
+            thumb = img.resize((100, 100))
+
+            # Получаем все цвета и их количество
+            pixels = thumb.getcolors(10000)
+            if not pixels:
+                return False
+
+            total_pixels = sum(count for count, _ in pixels)
+
+            # Проверяем белые и почти белые пиксели
+            white_pixels = sum(
+                count for count, color in pixels
+                if all(c > 250 for c in color)  # Немного строже для белого
+            )
+
+            # Проверяем очень светлые пиксели
+            very_light_pixels = sum(
+                count for count, color in pixels
+                if all(c > 240 for c in color)
+            )
+
+            # Проверяем наличие темных пикселей (текст, границы и т.д.)
+            dark_pixels = sum(
+                count for count, color in pixels
+                if any(c < 200 for c in color)
+            )
+
+            # Вычисляем процентные соотношения
+            white_ratio = white_pixels / total_pixels
+            very_light_ratio = very_light_pixels / total_pixels
+            dark_ratio = dark_pixels / total_pixels
+
+            # Комплексная проверка контента:
+            # 1. Если более 98% чисто белых пикселей - вероятно пустой экран
+            if white_ratio > 0.98:
+                return False
+
+            # 2. Если более 95% очень светлых пикселей И менее 1% темных - вероятно пустой
+            if very_light_ratio > 0.95 and dark_ratio < 0.01:
+                return False
+
+            # 3. Если есть заметное количество темных пикселей - вероятно есть контент
+            if dark_ratio > 0.02:  # Более 2% темных пикселей
+                return True
+
+            # По умолчанию считаем что контент есть
+            return True
+
     def capture_screenshot(self, url: str, viewport: Viewport, retry_count: int = 3) -> Dict:
         for attempt in range(retry_count):
             driver = None
+            temp_screenshot = None
             try:
                 options = self.get_chrome_options()
                 options.add_argument(f'user-agent={viewport.user_agent}')
@@ -128,49 +257,63 @@ class WebsiteScreenshotter:
 
                 driver.get(url)
 
+                # Enhanced waiting for modern frameworks
+                self.wait_for_page_load(driver, viewport)
+                self.inject_hydration_handling(driver)
+
                 # Inject CSS to hide scrollbars
                 driver.execute_script("""
-                    document.documentElement.style.overflow = 'hidden';
-                    document.body.style.overflow = 'hidden';
+                   document.documentElement.style.overflow = 'hidden';
+                   document.body.style.overflow = 'hidden';
 
-                    // Hide WebKit scrollbars
-                    document.documentElement.style.setProperty(
-                        '::-webkit-scrollbar', 
-                        'display: none', 
-                        'important'
-                    );
+                   // Hide WebKit scrollbars
+                   document.documentElement.style.setProperty(
+                       '::-webkit-scrollbar', 
+                       'display: none', 
+                       'important'
+                   );
 
-                    // Add CSS for Firefox and other browsers
-                    var style = document.createElement('style');
-                    style.textContent = `
-                        * {
-                            scrollbar-width: none !important;
-                            -ms-overflow-style: none !important;
-                        }
-                    `;
-                    document.head.appendChild(style);
-                """)
+                   // Add CSS for Firefox and other browsers
+                   var style = document.createElement('style');
+                   style.textContent = `
+                       * {
+                           scrollbar-width: none !important;
+                           -ms-overflow-style: none !important;
+                       }
+                   `;
+                   document.head.appendChild(style);
+               """)
 
-                # Wait for page load
-                wait = WebDriverWait(driver, 20)
-                wait.until(EC.presence_of_element_located((By.TAG_NAME, "body")))
-
-                # Additional wait for dynamic content
-                time.sleep(2)
+                # Wait for any remaining dynamic content
+                time.sleep(3)
 
                 # Reset to exact viewport size before screenshot
                 driver.set_window_size(physical_width, physical_height)
                 time.sleep(1)
 
-                screenshot_path = os.path.join(
+                # Make temporary screenshot for checking
+                temp_screenshot = os.path.join(
+                    self.temp_dir,
+                    f"temp_{viewport.name}_{attempt}.png"
+                )
+                driver.save_screenshot(temp_screenshot)
+
+                # Check content
+                if not self.check_screenshot_content(temp_screenshot):
+                    raise WebDriverException(
+                        f"Empty or blank screen detected for {viewport.name}"
+                    )
+
+                # If check passed, save final screenshot
+                final_screenshot = os.path.join(
                     self.output_dir,
                     f"screenshot-{viewport.name}.png"
                 )
-                driver.save_screenshot(screenshot_path)
+                os.replace(temp_screenshot, final_screenshot)
 
                 return {
                     "name": viewport.name,
-                    "path": screenshot_path,
+                    "path": final_screenshot,
                     "width": viewport.width,
                     "height": viewport.height,
                     "dpr": viewport.dpr,
@@ -179,16 +322,12 @@ class WebsiteScreenshotter:
                     "user_agent": viewport.user_agent
                 }
 
-            except WebDriverException as e:
+            except Exception as e:
                 logging.warning(f"Attempt {attempt + 1} failed for {viewport.name}: {str(e)}")
                 if attempt == retry_count - 1:
                     logging.error(f"Failed to capture {viewport.name} after {retry_count} attempts")
                     return None
-                time.sleep(2)  # Wait before retry
-
-            except Exception as e:
-                logging.error(f"Unexpected error capturing {viewport.name}: {str(e)}")
-                return None
+                time.sleep(3)
 
             finally:
                 if driver:
@@ -196,6 +335,32 @@ class WebsiteScreenshotter:
                         driver.quit()
                     except:
                         pass
+                # Clean up temp file
+                if temp_screenshot and os.path.exists(temp_screenshot):
+                    try:
+                        os.remove(temp_screenshot)
+                    except:
+                        pass
+
+    def verify_page_content(self, driver: webdriver.Chrome) -> bool:
+        """Verify that the page has loaded meaningful content"""
+        try:
+            # Check for minimum content
+            content_check = driver.execute_script("""
+                return {
+                    elementCount: document.querySelectorAll('*').length,
+                    textLength: document.body.textContent.trim().length,
+                    hasImages: document.querySelectorAll('img').length > 0,
+                    hasContent: document.body.innerHTML.length > 100
+                }
+            """)
+
+            # Verify minimum requirements
+            return (content_check['elementCount'] > 10 and
+                    content_check['textLength'] > 50 and
+                    (content_check['hasImages'] or content_check['hasContent']))
+        except:
+            return False
 
     def create_category_collages(self, screenshots: List[Dict]) -> None:
         try:
@@ -204,6 +369,7 @@ class WebsiteScreenshotter:
                 logging.error("No valid screenshots to create collages")
                 return
 
+            # Define categories and device names inside the method
             categories = {
                 'Desktop_Monitors': {
                     'title': 'Desktop Monitors',
@@ -265,76 +431,206 @@ class WebsiteScreenshotter:
                 'oneplus-12': 'OnePlus 12 (1080×2400)'
             }
 
-            for category_name, category_info in categories.items():
-                # Filter screenshots for current category
-                category_shots = [
-                    s for s in screenshots
-                    if s['name'] in category_info['devices']
-                ]
+            # Modern color scheme
+            COLORS = {
+                'background': '#FFFFFF',
+                'text_primary': '#191919',
+                'text_secondary': '#666666',
+                'accent': '#0057FF',
+                'divider': '#E8E8E8'
+            }
 
+            # Enhanced typography and spacing
+            TYPOGRAPHY = {
+                'title_size': 48,
+                'subtitle_size': 24,
+                'caption_size': 16,
+                'spacing': 40
+            }
+
+            # Font paths for different operating systems
+            FONT_PATHS = {
+                'windows': {
+                    'regular': 'C:/Windows/Fonts/arial.ttf',
+                    'bold': 'C:/Windows/Fonts/arialbd.ttf'
+                },
+                'darwin': {  # macOS
+                    'regular': '/System/Library/Fonts/Helvetica.ttc',
+                    'bold': '/System/Library/Fonts/Helvetica-Bold.ttf'
+                },
+                'linux': {
+                    'regular': '/usr/share/fonts/truetype/dejavu/DejaVuSans.ttf',
+                    'bold': '/usr/share/fonts/truetype/dejavu/DejaVuSans-Bold.ttf'
+                }
+            }
+
+            # Determine OS and set font paths
+            import platform
+            system = platform.system().lower()
+            if system in FONT_PATHS:
+                font_paths = FONT_PATHS[system]
+            else:
+                font_paths = FONT_PATHS['windows']  # Default to Windows paths
+
+            # Load fonts with error handling and fallbacks
+            try:
+                # First try loading system fonts
+                title_font = ImageFont.truetype(font_paths['bold'], TYPOGRAPHY['title_size'])
+                subtitle_font = ImageFont.truetype(font_paths['regular'], TYPOGRAPHY['subtitle_size'])
+                caption_font = ImageFont.truetype(font_paths['regular'], TYPOGRAPHY['caption_size'])
+            except Exception as e:
+                logging.warning(f"Failed to load system fonts: {e}")
+                try:
+                    # Try loading from the current directory
+                    title_font = ImageFont.truetype("Arial.ttf", TYPOGRAPHY['title_size'])
+                    subtitle_font = ImageFont.truetype("Arial.ttf", TYPOGRAPHY['subtitle_size'])
+                    caption_font = ImageFont.truetype("Arial.ttf", TYPOGRAPHY['caption_size'])
+                except Exception as e:
+                    logging.warning(f"Failed to load local fonts: {e}")
+                    # Fall back to default font
+                    title_font = ImageFont.load_default()
+                    subtitle_font = ImageFont.load_default()
+                    caption_font = ImageFont.load_default()
+
+            def draw_text_with_encoding(draw, position, text, font, fill):
+                """Helper function to draw text with proper encoding"""
+                try:
+                    # Try drawing with default encoding
+                    draw.text(position, text, font=font, fill=fill)
+                except UnicodeEncodeError:
+                    # If default encoding fails, try UTF-8
+                    encoded_text = text.encode('utf-8', 'ignore').decode('utf-8')
+                    draw.text(position, encoded_text, font=font, fill=fill)
+
+            for category_name, category_info in categories.items():
+                category_shots = [s for s in screenshots if s['name'] in category_info['devices']]
                 if not category_shots:
                     continue
 
-                # Calculate grid dimensions
-                shots_count = len(category_shots)
-                cols = min(3, shots_count)
-                rows = (shots_count + cols - 1) // cols
+                # Calculate Behance-style grid layout
+                margin = 60
+                gutter = 30
+                card_width = 1200
+                card_height = 900
 
-                # Create collage with appropriate size and title space
-                collage_width = cols * 1200 + 200
-                collage_height = rows * 800 + 150  # Extra space for title
-                collage = Image.new('RGB', (collage_width, collage_height), 'white')
-                draw = ImageDraw.Draw(collage)
+                cols = min(2, len(category_shots))  # Behance typically uses 2 columns
+                rows = (len(category_shots) + cols - 1) // cols
 
-                try:
-                    # Try to load larger font for title
-                    title_font = ImageFont.truetype("arial.ttf", 30)
-                    device_font = ImageFont.truetype("arial.ttf", 20)
-                except OSError:
-                    title_font = ImageFont.load_default()
-                    device_font = ImageFont.load_default()
+                # Create large canvas with room for header and description
+                canvas_width = margin * 2 + card_width * cols + gutter * (cols - 1)
+                canvas_height = (
+                        margin * 2 +  # Top and bottom margins
+                        150 +  # Header space
+                        100 +  # Description space
+                        (card_height * rows) + (gutter * (rows - 1))
+                )
 
-                # Draw category title
-                draw.text((100, 20), category_info['title'], fill='#000000', font=title_font)
+                # Create canvas with white background
+                canvas = Image.new('RGB', (canvas_width, canvas_height), COLORS['background'])
+                draw = ImageDraw.Draw(canvas)
 
-                # Sort screenshots by device name
-                category_shots.sort(key=lambda x: device_names.get(x['name'], x['name']))
+                # Draw header section with Behance-style typography
+                header_y = margin
+                draw_text_with_encoding(
+                    draw,
+                    (margin, header_y),
+                    category_info['title'],
+                    title_font,
+                    COLORS['text_primary']
+                )
 
-                # Place screenshots in grid
-                for i, screenshot in enumerate(category_shots):
-                    row = i // cols
-                    col = i % cols
-                    x = col * 1200 + 100
-                    y = row * 800 + 100  # Start from 100px to account for title
+                # Add category description
+                description_y = header_y + TYPOGRAPHY['title_size'] + 20
+                draw_text_with_encoding(
+                    draw,
+                    (margin, description_y),
+                    f"Responsive design showcase for {category_info['title']} devices",
+                    subtitle_font,
+                    COLORS['text_secondary']
+                )
+
+                # Draw subtle divider line
+                divider_y = description_y + TYPOGRAPHY['subtitle_size'] + 30
+                draw.line(
+                    (margin, divider_y, canvas_width - margin, divider_y),
+                    fill=COLORS['divider'],
+                    width=2
+                )
+
+                # Place screenshots in grid with enhanced styling
+                content_start_y = divider_y + 50
+                for idx, screenshot in enumerate(category_shots):
+                    row = idx // cols
+                    col = idx % cols
+
+                    x = margin + (card_width + gutter) * col
+                    y = content_start_y + (card_height + gutter) * row
 
                     try:
                         with Image.open(screenshot["path"]) as img:
-                            scale = min(
-                                1000 / screenshot["width"],
-                                700 / screenshot["height"]
-                            )
-                            new_width = int(screenshot["width"] * scale)
-                            new_height = int(screenshot["height"] * scale)
+                            # Calculate dimensions maintaining aspect ratio
+                            display_width = card_width - 60  # Padding inside card
+                            scale = display_width / screenshot["width"]
+                            display_height = int(screenshot["height"] * scale)
+
+                            # Resize screenshot
                             img_resized = img.resize(
-                                (new_width, new_height),
+                                (display_width, display_height),
                                 Image.Resampling.LANCZOS
                             )
-                            collage.paste(img_resized, (x, y))
 
-                            # Use friendly device name
+                            # Create card background
+                            card = Image.new('RGB', (card_width, card_height), COLORS['background'])
+                            card_draw = ImageDraw.Draw(card)
+
+                            # Center screenshot in card
+                            img_x = (card_width - display_width) // 2
+                            img_y = 30  # Top padding
+                            card.paste(img_resized, (img_x, img_y))
+
+                            # Add device info with enhanced typography
                             device_name = device_names.get(screenshot['name'], screenshot['name'])
-                            text = f"{device_name} (DPR: {screenshot['dpr']}x)"
-                            draw.text((x, y + new_height + 10), text, fill='#333333', font=device_font)
+                            info_y = img_y + display_height + 20
+
+                            # Device name
+                            draw_text_with_encoding(
+                                card_draw,
+                                (30, info_y),
+                                device_name,
+                                subtitle_font,
+                                COLORS['text_primary']
+                            )
+
+                            # Technical specs
+                            specs_text = f"Resolution: {screenshot['width']}×{screenshot['height']} • DPR: {screenshot['dpr']}x"
+                            draw_text_with_encoding(
+                                card_draw,
+                                (30, info_y + TYPOGRAPHY['subtitle_size'] + 10),
+                                specs_text,
+                                caption_font,
+                                COLORS['text_secondary']
+                            )
+
+                            # Add subtle border to card
+                            card_draw.rectangle(
+                                [0, 0, card_width - 1, card_height - 1],
+                                outline=COLORS['divider'],
+                                width=1
+                            )
+
+                            # Paste card onto main canvas
+                            canvas.paste(card, (x, y))
+
                     except Exception as e:
                         logging.error(f"Error processing image {screenshot['name']}: {str(e)}")
                         continue
 
-                # Save category collage
+                # Save optimized collage
                 collage_path = os.path.join(
                     self.output_dir,
                     f"collage_{category_name}.png"
                 )
-                collage.save(collage_path, optimize=True)
+                canvas.save(collage_path, optimize=True, quality=95)
                 logging.info(f"{category_name} collage saved to: {collage_path}")
 
         except Exception as e:
@@ -369,9 +665,9 @@ class WebsiteScreenshotter:
 
 
 def main():
-    OUTPUT_DIR = r"C:\Users\user\Downloads\testScript"
-    URL = "https://www.wikipedia.org/"  # Your target URL
-    MAX_WORKERS = 8
+    OUTPUT_DIR = r"C:\Users\user\Downloads\testScript"  # Change this to your desired output directory
+    URL = "https://www.wikipedia.org/"  # Change this to your target URL
+    MAX_WORKERS = 8  # Adjust based on your system's capabilities
 
     screenshotter = WebsiteScreenshotter(
         output_dir=OUTPUT_DIR,
