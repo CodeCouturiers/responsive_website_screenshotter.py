@@ -369,54 +369,56 @@ class WebsiteScreenshotter:
                 logging.error("No valid screenshots to create collages")
                 return
 
+            # Device categorization and naming
             categories = {
                 'Desktop_Monitors': {
                     'title': 'Desktop Monitors',
-                    'subtitle': 'Display Resolutions Showcase',
+                    'subtitle': 'Modern Display Resolutions',
                     'devices': ['desktop-fhd', 'desktop-2k', 'desktop-4k', 'desktop-laptop', 'desktop-laptop-hd']
                 },
                 'MacBooks': {
                     'title': 'MacBook Pro',
-                    'subtitle': 'Retina Display Collection',
+                    'subtitle': 'Professional Retina Displays',
                     'devices': ['macbook-pro-15', 'macbook-pro-13']
                 },
                 'iPads': {
                     'title': 'iPad Collection',
-                    'subtitle': 'Liquid Retina Displays',
+                    'subtitle': 'Liquid Retina Technology',
                     'devices': ['ipad-pro-12.9', 'ipad-pro-11', 'ipad-10.9']
                 },
                 'Android_Tablets': {
                     'title': 'Android Tablets',
-                    'subtitle': 'Premium Display Series',
+                    'subtitle': 'Premium Display Gallery',
                     'devices': ['samsung-tab-s9', 'lenovo-tab-p12', 'xiaomi-pad-6']
                 },
                 'iPhones': {
-                    'title': 'iPhone 15 Series',
-                    'subtitle': 'Super Retina XDR',
+                    'title': 'iPhone Series',
+                    'subtitle': 'Super Retina XDR Displays',
                     'devices': ['iphone-15-pro-max', 'iphone-15-pro', 'iphone-15']
                 },
                 'Android_Phones': {
                     'title': 'Android Flagships',
-                    'subtitle': 'Premium Display Collection',
+                    'subtitle': 'Next-Gen Display Collection',
                     'devices': ['samsung-s24-ultra', 'samsung-s24', 'pixel-8-pro', 'oneplus-12']
                 }
             }
 
+            # Friendly device names 
             device_names = {
                 # Desktop Monitors
-                'desktop-fhd': '1920×1080 FHD',
-                'desktop-2k': '2560×1440 QHD',
-                'desktop-4k': '3840×2160 4K',
-                'desktop-laptop': '1366×768',
-                'desktop-laptop-hd': '1536×864',
+                'desktop-fhd': 'Full HD Display',
+                'desktop-2k': 'QHD Display',
+                'desktop-4k': '4K UHD Display',
+                'desktop-laptop': 'Standard Laptop',
+                'desktop-laptop-hd': 'HD+ Laptop',
 
                 # MacBooks
-                'macbook-pro-15': 'MacBook Pro 15″',
-                'macbook-pro-13': 'MacBook Pro 13″',
+                'macbook-pro-15': 'MacBook Pro 15"',
+                'macbook-pro-13': 'MacBook Pro 13"',
 
                 # iPads
-                'ipad-pro-12.9': 'iPad Pro 12.9″',
-                'ipad-pro-11': 'iPad Pro 11″',
+                'ipad-pro-12.9': 'iPad Pro 12.9"',
+                'ipad-pro-11': 'iPad Pro 11"',
                 'ipad-10.9': 'iPad Air',
 
                 # Android Tablets
@@ -436,205 +438,230 @@ class WebsiteScreenshotter:
                 'oneplus-12': 'OnePlus 12'
             }
 
-            COLORS = {
-                'background': '#FFFFFF',
-                'card_background': '#FFFFFF',
-                'text_primary': '#000000',
-                'text_secondary': '#666666',
-                'border': '#EAEAEA',
-                'shadow': (0, 0, 0, 15),  # RGBA for shadows
-            }
-
-            TYPOGRAPHY = {
-                'title_size': 64,
-                'subtitle_size': 24,
-                'device_name_size': 20,
-                'specs_size': 14
-            }
-
-            FONT_PATHS = {
-                'windows': {
-                    'regular': 'C:/Windows/Fonts/arial.ttf',
-                    'bold': 'C:/Windows/Fonts/arialbd.ttf'
+            # Behance-inspired design system
+            DESIGN = {
+                'colors': {
+                    'background': '#FFFFFF',  # Clean white background like Behance
+                    'card': '#FFFFFF',
+                    'text': {
+                        'primary': '#000000',  # More contrasting black for titles
+                        'secondary': '#444444',  # Dark grey for subtitles
+                        'tertiary': '#666666'  # Grey for other text
+                    },
+                    'border': '#EAEAEA',
+                    'shadow': (0, 0, 0, 15)  # Slightly reduced shadow
                 },
-                'darwin': {
-                    'regular': '/System/Library/Fonts/Helvetica.ttc',
-                    'bold': '/System/Library/Fonts/Helvetica-Bold.ttf'
+                'spacing': {
+                    'margin': 100,  # Increased margins
+                    'gutter': 40,
+                    'header': 300,  # More space for header
+                    'card_padding': 40
                 },
-                'linux': {
-                    'regular': '/usr/share/fonts/truetype/dejavu/DejaVuSans.ttf',
-                    'bold': '/usr/share/fonts/truetype/dejavu/DejaVuSans-Bold.ttf'
+                'typography': {
+                    'title': 96,  # Larger title size
+                    'subtitle': 32,  # Larger subtitle size
+                    'device_name': 24,
+                    'specs': 16
                 }
             }
 
+            # Font configuration with system fallbacks
             import platform
             system = platform.system().lower()
-            font_paths = FONT_PATHS.get(system, FONT_PATHS['windows'])
+
+            FONTS = {
+                'windows': {
+                    'regular': 'C:/Windows/Fonts/segoeui.ttf',
+                    'bold': 'C:/Windows/Fonts/segoeuib.ttf',
+                    'light': 'C:/Windows/Fonts/segoeuil.ttf'  # Added light variant
+                },
+                'darwin': {
+                    'regular': '/System/Library/Fonts/SFPro-Regular.ttf',
+                    'bold': '/System/Library/Fonts/SFPro-Bold.ttf',
+                    'light': '/System/Library/Fonts/SFPro-Light.ttf'
+                },
+                'linux': {
+                    'regular': '/usr/share/fonts/truetype/dejavu/DejaVuSans.ttf',
+                    'bold': '/usr/share/fonts/truetype/dejavu/DejaVuSans-Bold.ttf',
+                    'light': '/usr/share/fonts/truetype/dejavu/DejaVuSans-Light.ttf'
+                }
+            }
 
             try:
-                title_font = ImageFont.truetype(font_paths['bold'], TYPOGRAPHY['title_size'])
-                subtitle_font = ImageFont.truetype(font_paths['regular'], TYPOGRAPHY['subtitle_size'])
-                device_font = ImageFont.truetype(font_paths['bold'], TYPOGRAPHY['device_name_size'])
-                specs_font = ImageFont.truetype(font_paths['regular'], TYPOGRAPHY['specs_size'])
+                fonts = FONTS.get(system, FONTS['windows'])
+                title_font = ImageFont.truetype(fonts['light'], DESIGN['typography']['title'])  # Light weight for title
+                subtitle_font = ImageFont.truetype(fonts['light'],
+                                                   DESIGN['typography']['subtitle'])  # Light weight for subtitle
+                device_font = ImageFont.truetype(fonts['bold'], DESIGN['typography']['device_name'])
+                specs_font = ImageFont.truetype(fonts['regular'], DESIGN['typography']['specs'])
             except Exception as e:
-                logging.warning(f"Failed to load system fonts: {e}")
-                title_font = ImageFont.load_default()
-                subtitle_font = ImageFont.load_default()
-                device_font = ImageFont.load_default()
-                specs_font = ImageFont.load_default()
+                logging.warning(f"Font loading failed: {e}. Using default font.")
+                title_font = subtitle_font = device_font = specs_font = ImageFont.load_default()
 
-            def draw_text(draw, position, text, font, color, align='left', max_width=None):
+            def create_shadow(size, radius=8):
+                shadow = Image.new('RGBA', size, (0, 0, 0, 0))
+                draw = ImageDraw.Draw(shadow)
+                draw.rectangle((radius, radius, size[0] - radius, size[1] - radius),
+                               fill=(0, 0, 0, DESIGN['colors']['shadow'][3]))
+                return shadow.filter(ImageFilter.GaussianBlur(radius))
+
+            def draw_text(draw, pos, text, font, color, align='center', width=None):
+                """
+                Draw text with alignment support
+ 
+                Args:
+                    draw: ImageDraw object
+                    pos: (x, y) position tuple
+                    text: text to draw
+                    font: font to use
+                    color: text color
+                    align: alignment ('left', 'center', 'right')
+                    width: total width for alignment calculation
+                """
                 bbox = font.getbbox(text)
                 text_width = bbox[2] - bbox[0]
+                x, y = pos
 
-                x, y = position
-                if align == 'center' and max_width:
-                    x = x + (max_width - text_width) // 2
+                if align == 'center' and width:
+                    x += (width - text_width) // 2
+                elif align == 'right' and width:
+                    x += width - text_width
 
                 draw.text((x, y), text, font=font, fill=color)
                 return bbox[3] - bbox[1]
 
+            # Process each category
             for category_name, category_info in categories.items():
                 category_shots = [s for s in screenshots if s['name'] in category_info['devices']]
                 if not category_shots:
                     continue
 
-                # Layout settings
-                margin = 80
-                gutter = 40
-                header_height = 200
-                card_padding = 40
-
-                # Calculate maximum aspect ratio
-                max_ratio = max(s["height"] / s["width"] for s in category_shots)
-
-                # Calculate card dimensions
+                # Layout calculations
+                spacing = DESIGN['spacing']
                 cols = min(2, len(category_shots))
-                card_width = int((3000 - (2 * margin) - ((cols - 1) * gutter)) / cols)
-                image_width = card_width - (card_padding * 2)
-                image_height = int(image_width * max_ratio)
-                text_area_height = 100
-                card_height = card_padding + image_height + text_area_height + card_padding
 
-                # Calculate canvas size
+                # Card dimensions
+                card_width = int((3000 - (2 * spacing['margin']) - ((cols - 1) * spacing['gutter'])) / cols)
+                image_width = card_width - (spacing['card_padding'] * 2)
+
+                # Calculate maximum aspect ratio and card height 
+                max_ratio = max(s["height"] / s["width"] for s in category_shots)
+                image_height = int(image_width * max_ratio)
+                card_height = spacing['card_padding'] * 2 + image_height + 120
+
+                # Canvas dimensions
                 rows = (len(category_shots) + cols - 1) // cols
-                canvas_width = margin * 2 + card_width * cols + gutter * (cols - 1)
+                canvas_width = spacing['margin'] * 2 + card_width * cols + spacing['gutter'] * (cols - 1)
                 canvas_height = (
-                        margin +
-                        header_height +
+                        spacing['margin'] +
+                        spacing['header'] +
                         (card_height * rows) +
-                        (gutter * (rows - 1)) +
-                        margin
+                        (spacing['gutter'] * (rows - 1)) +
+                        spacing['margin']
                 )
 
                 # Create canvas
-                canvas = Image.new('RGB', (canvas_width, canvas_height), COLORS['background'])
+                canvas = Image.new('RGB', (canvas_width, canvas_height), DESIGN['colors']['background'])
                 draw = ImageDraw.Draw(canvas)
 
                 # Draw header
-                header_y = margin
+                header_y = spacing['margin'] + 40  # Additional top padding
                 title_height = draw_text(
                     draw,
-                    (margin, header_y),
-                    category_info['title'],
+                    (spacing['margin'], header_y),
+                    category_info['title'].upper(),  # Title in uppercase
                     title_font,
-                    COLORS['text_primary']
+                    DESIGN['colors']['text']['primary'],
+                    'center',
+                    canvas_width - (spacing['margin'] * 2)
                 )
 
                 # Draw subtitle
-                subtitle_y = header_y + title_height + 20
+                subtitle_y = header_y + title_height + 30  # Increased spacing between title and subtitle
                 draw_text(
                     draw,
-                    (margin, subtitle_y),
+                    (spacing['margin'], subtitle_y),
                     category_info['subtitle'],
                     subtitle_font,
-                    COLORS['text_secondary']
+                    DESIGN['colors']['text']['secondary'],
+                    'center',
+                    canvas_width - (spacing['margin'] * 2)
                 )
 
-                # Draw cards
+                # Draw device cards
                 for idx, screenshot in enumerate(category_shots):
                     row = idx // cols
                     col = idx % cols
 
-                    x = margin + (card_width + gutter) * col
-                    y = margin + header_height + (card_height + gutter) * row
+                    x = spacing['margin'] + (card_width + spacing['gutter']) * col
+                    y = spacing['margin'] + spacing['header'] + (card_height + spacing['gutter']) * row
 
                     try:
                         with Image.open(screenshot["path"]) as img:
-                            # Create card with shadow
-                            shadow_size = 2
-                            shadow = Image.new('RGBA', (card_width + shadow_size * 2, card_height + shadow_size * 2),
-                                               COLORS['shadow'])
-                            shadow = shadow.filter(ImageFilter.GaussianBlur(2))
-                            canvas.paste(shadow, (x - shadow_size, y - shadow_size), shadow)
+                            # Create and apply card shadow
+                            shadow = create_shadow((card_width + 20, card_height + 20))
+                            canvas.paste(shadow, (x - 10, y - 10), shadow)
 
-                            # Create and paste card background
-                            card = Image.new('RGB', (card_width, card_height), COLORS['card_background'])
+                            # Create card background
+                            card = Image.new('RGB', (card_width, card_height), DESIGN['colors']['card'])
                             canvas.paste(card, (x, y))
 
-                            # Draw card border
-                            draw.rectangle(
-                                [x, y, x + card_width - 1, y + card_height - 1],
-                                outline=COLORS['border'],
-                                width=1
-                            )
-
-                            # Calculate and draw screenshot
+                            # Calculate image dimensions and position
                             display_width = image_width
                             scale = display_width / screenshot["width"]
                             display_height = int(screenshot["height"] * scale)
 
+                            # Resize and paste screenshot
                             img_resized = img.resize(
                                 (display_width, display_height),
                                 Image.Resampling.LANCZOS
                             )
 
-                            # Center the screenshot in card
-                            img_x = x + (card_width - display_width) // 2
-                            img_y = y + card_padding
+                            img_x = x + spacing['card_padding']
+                            img_y = y + spacing['card_padding']
                             canvas.paste(img_resized, (img_x, img_y))
 
-                            # Draw device info
-                            device_name = device_names.get(screenshot['name'], screenshot['name'])
+                            # Draw device information
                             info_y = img_y + display_height + 25
 
                             # Device name
+                            device_name = device_names.get(screenshot['name'], screenshot['name'])
                             draw_text(
                                 draw,
                                 (img_x, info_y),
                                 device_name,
                                 device_font,
-                                COLORS['text_primary'],
+                                DESIGN['colors']['text']['primary'],
                                 'center',
                                 display_width
                             )
 
-                            # Technical specs
+                            # Technical specifications
                             specs_text = f"{screenshot['width']}×{screenshot['height']} @ {screenshot['dpr']}x"
                             draw_text(
                                 draw,
-                                (img_x, info_y + 30),
+                                (img_x, info_y + 35),
                                 specs_text,
                                 specs_font,
-                                COLORS['text_secondary'],
+                                DESIGN['colors']['text']['secondary'],
                                 'center',
                                 display_width
                             )
 
                     except Exception as e:
-                        logging.error(f"Error processing image {screenshot['name']}: {str(e)}")
+                        logging.error(f"Error processing {screenshot['name']}: {str(e)}")
                         continue
 
-                # Save collage
+                # Save the collage
                 collage_path = os.path.join(
                     self.output_dir,
                     f"collage_{category_name}.png"
                 )
                 canvas.save(collage_path, optimize=True, quality=95)
-                logging.info(f"{category_name} collage saved to: {collage_path}")
+                logging.info(f"Saved {category_name} collage to: {collage_path}")
 
         except Exception as e:
-            logging.error(f"Error creating category collages: {str(e)}")
+            logging.error(f"Collage creation failed: {str(e)}")
 
     def process_website(self, url: str) -> None:
         logging.info(f"Starting capture for: {url}")
@@ -666,7 +693,7 @@ class WebsiteScreenshotter:
 
 def main():
     OUTPUT_DIR = r"C:\Users\user\Downloads\testScript"  # Change this to your desired output directory
-    URL = "https://www.wikipedia.org/"  # Change this to your target URL
+    URL = "https://codecouturehub.com/"  # Change this to your target URL
     MAX_WORKERS = 8  # Adjust based on your system's capabilities
 
     screenshotter = WebsiteScreenshotter(
