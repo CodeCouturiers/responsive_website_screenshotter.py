@@ -18,38 +18,61 @@ class Viewport:
     width: int
     height: int
     name: str
+    dpr: float
+    user_agent: str
 
 
 class WebsiteScreenshotter:
     VIEWPORTS = [
         # Desktop (Most common desktop resolutions in 2024)
-        Viewport(1920, 1080, "desktop-fhd"),  # Full HD
-        Viewport(2560, 1440, "desktop-2k"),  # 2K QHD
-        Viewport(3840, 2160, "desktop-4k"),  # 4K UHD
-        Viewport(1366, 768, "desktop-laptop"),  # Common laptop
-        Viewport(1536, 864, "desktop-laptop-hd"),  # HD+ Laptop
+        Viewport(1920, 1080, "desktop-fhd", 1.0,
+                 "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/121.0.0.0 Safari/537.36"),
+        Viewport(2560, 1440, "desktop-2k", 1.5,
+                 "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/121.0.0.0 Safari/537.36"),
+        Viewport(3840, 2160, "desktop-4k", 2.0,
+                 "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/121.0.0.0 Safari/537.36"),
+        Viewport(1366, 768, "desktop-laptop", 1.0,
+                 "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/121.0.0.0 Safari/537.36"),
+        Viewport(1536, 864, "desktop-laptop-hd", 1.25,
+                 "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/121.0.0.0 Safari/537.36"),
 
         # Apple Devices
-        Viewport(2880, 1800, "macbook-pro-15"),  # MacBook Pro 15"
-        Viewport(2560, 1600, "macbook-pro-13"),  # MacBook Pro 13"
-        Viewport(2732, 2048, "ipad-pro-12.9"),  # iPad Pro 12.9"
-        Viewport(2388, 1668, "ipad-pro-11"),  # iPad Pro 11"
-        Viewport(2048, 1536, "ipad-10.9"),  # iPad Air/iPad 10.9"
+        Viewport(2880, 1800, "macbook-pro-15", 2.0,
+                 "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/17.2.1 Safari/605.1.15"),
+        Viewport(2560, 1600, "macbook-pro-13", 2.0,
+                 "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/17.2.1 Safari/605.1.15"),
+        Viewport(2732, 2048, "ipad-pro-12.9", 2.0,
+                 "Mozilla/5.0 (iPad; CPU OS 17_2_1 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/17.2 Mobile/15E148 Safari/604.1"),
+        Viewport(2388, 1668, "ipad-pro-11", 2.0,
+                 "Mozilla/5.0 (iPad; CPU OS 17_2_1 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/17.2 Mobile/15E148 Safari/604.1"),
+        Viewport(2048, 1536, "ipad-10.9", 2.0,
+                 "Mozilla/5.0 (iPad; CPU OS 17_2_1 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/17.2 Mobile/15E148 Safari/604.1"),
 
         # Popular Android Tablets
-        Viewport(2560, 1600, "samsung-tab-s9"),  # Samsung Tab S9
-        Viewport(2000, 1200, "lenovo-tab-p12"),  # Lenovo Tab P12
-        Viewport(2160, 1620, "xiaomi-pad-6"),  # Xiaomi Pad 6
+        Viewport(2560, 1600, "samsung-tab-s9", 1.5,
+                 "Mozilla/5.0 (Linux; Android 14; SM-X710) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/121.0.0.0 Safari/537.36"),
+        Viewport(2000, 1200, "lenovo-tab-p12", 1.5,
+                 "Mozilla/5.0 (Linux; Android 13; Tab P12 Pro) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/121.0.0.0 Safari/537.36"),
+        Viewport(2160, 1620, "xiaomi-pad-6", 1.5,
+                 "Mozilla/5.0 (Linux; Android 13; 23043RP34G) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/121.0.0.0 Safari/537.36"),
 
         # Popular Smartphones
-        Viewport(1290, 2796, "iphone-15-pro-max"),  # iPhone 15 Pro Max
-        Viewport(1179, 2556, "iphone-15-pro"),  # iPhone 15 Pro
-        Viewport(1170, 2532, "iphone-15"),  # iPhone 15
-        Viewport(1440, 3088, "samsung-s24-ultra"),  # Samsung S24 Ultra
-        Viewport(1080, 2340, "samsung-s24"),  # Samsung S24
-        Viewport(1080, 2400, "pixel-8-pro"),  # Google Pixel 8 Pro
-        Viewport(1080, 2400, "oneplus-12")  # OnePlus 12
+        Viewport(1290, 2796, "iphone-15-pro-max", 3.0,
+                 "Mozilla/5.0 (iPhone; CPU iPhone OS 17_2_1 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/17.2 Mobile/15E148 Safari/604.1"),
+        Viewport(1179, 2556, "iphone-15-pro", 3.0,
+                 "Mozilla/5.0 (iPhone; CPU iPhone OS 17_2_1 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/17.2 Mobile/15E148 Safari/604.1"),
+        Viewport(1170, 2532, "iphone-15", 3.0,
+                 "Mozilla/5.0 (iPhone; CPU iPhone OS 17_2_1 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/17.2 Mobile/15E148 Safari/604.1"),
+        Viewport(1440, 3088, "samsung-s24-ultra", 3.0,
+                 "Mozilla/5.0 (Linux; Android 14; SM-S928B) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/121.0.0.0 Mobile Safari/537.36"),
+        Viewport(1080, 2340, "samsung-s24", 2.5,
+                 "Mozilla/5.0 (Linux; Android 14; SM-S921B) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/121.0.0.0 Mobile Safari/537.36"),
+        Viewport(1080, 2400, "pixel-8-pro", 2.5,
+                 "Mozilla/5.0 (Linux; Android 14; Pixel 8 Pro) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/121.0.0.0 Mobile Safari/537.36"),
+        Viewport(1080, 2400, "oneplus-12", 2.5,
+                 "Mozilla/5.0 (Linux; Android 14; CPH2573) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/121.0.0.0 Mobile Safari/537.36")
     ]
+
     def __init__(self, output_dir: str, max_workers: int = 3):
         self.output_dir = output_dir
         self.max_workers = max_workers
@@ -82,12 +105,27 @@ class WebsiteScreenshotter:
         for attempt in range(retry_count):
             driver = None
             try:
-                driver = webdriver.Chrome(options=self.get_chrome_options())
+                options = self.get_chrome_options()
+                options.add_argument(f'user-agent={viewport.user_agent}')
+                driver = webdriver.Chrome(options=options)
                 driver.set_page_load_timeout(30)
                 driver.set_script_timeout(30)
 
+                # Calculate physical pixels
+                physical_width = int(viewport.width / viewport.dpr)
+                physical_height = int(viewport.height / viewport.dpr)
+
                 # Set viewport size with additional padding
-                driver.set_window_size(viewport.width + 100, viewport.height + 100)
+                driver.set_window_size(physical_width + 100, physical_height + 100)
+
+                # Set device pixel ratio and mobile emulation
+                driver.execute_cdp_cmd('Emulation.setDeviceMetricsOverride', {
+                    'width': physical_width,
+                    'height': physical_height,
+                    'deviceScaleFactor': viewport.dpr,
+                    'mobile': 'mobile' in viewport.name.lower() or 'iphone' in viewport.name.lower()
+                })
+
                 driver.get(url)
 
                 # Wait for page load
@@ -98,7 +136,7 @@ class WebsiteScreenshotter:
                 time.sleep(2)
 
                 # Reset to exact viewport size before screenshot
-                driver.set_window_size(viewport.width, viewport.height)
+                driver.set_window_size(physical_width, physical_height)
                 time.sleep(1)
 
                 screenshot_path = os.path.join(
@@ -111,7 +149,11 @@ class WebsiteScreenshotter:
                     "name": viewport.name,
                     "path": screenshot_path,
                     "width": viewport.width,
-                    "height": viewport.height
+                    "height": viewport.height,
+                    "dpr": viewport.dpr,
+                    "physical_width": physical_width,
+                    "physical_height": physical_height,
+                    "user_agent": viewport.user_agent
                 }
 
             except WebDriverException as e:
@@ -134,7 +176,6 @@ class WebsiteScreenshotter:
 
     def create_collage(self, screenshots: List[Dict]) -> None:
         try:
-            # Filter out None values
             screenshots = [s for s in screenshots if s is not None]
 
             if not screenshots:
@@ -171,7 +212,7 @@ class WebsiteScreenshotter:
                         )
                         collage.paste(img_resized, (x, y))
 
-                        text = f"{screenshot['name']} ({screenshot['width']}x{screenshot['height']})"
+                        text = f"{screenshot['name']} ({screenshot['physical_width']}x{screenshot['physical_height']}, DPR: {screenshot['dpr']}x)"
                         draw.text((x, y + new_height + 10), text, fill='#333333', font=font)
                 except Exception as e:
                     logging.error(f"Error processing image {screenshot['name']}: {str(e)}")
@@ -217,7 +258,7 @@ class WebsiteScreenshotter:
 def main():
     OUTPUT_DIR = r"C:\Users\user\Downloads\testScript"
     URL = "https://www.wikipedia.org/"  # Your target URL
-    MAX_WORKERS = 3
+    MAX_WORKERS = 8
 
     screenshotter = WebsiteScreenshotter(
         output_dir=OUTPUT_DIR,
