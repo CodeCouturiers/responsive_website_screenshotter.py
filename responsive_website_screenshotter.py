@@ -128,6 +128,29 @@ class WebsiteScreenshotter:
 
                 driver.get(url)
 
+                # Inject CSS to hide scrollbars
+                driver.execute_script("""
+                    document.documentElement.style.overflow = 'hidden';
+                    document.body.style.overflow = 'hidden';
+
+                    // Hide WebKit scrollbars
+                    document.documentElement.style.setProperty(
+                        '::-webkit-scrollbar', 
+                        'display: none', 
+                        'important'
+                    );
+
+                    // Add CSS for Firefox and other browsers
+                    var style = document.createElement('style');
+                    style.textContent = `
+                        * {
+                            scrollbar-width: none !important;
+                            -ms-overflow-style: none !important;
+                        }
+                    `;
+                    document.head.appendChild(style);
+                """)
+
                 # Wait for page load
                 wait = WebDriverWait(driver, 20)
                 wait.until(EC.presence_of_element_located((By.TAG_NAME, "body")))
@@ -174,59 +197,148 @@ class WebsiteScreenshotter:
                     except:
                         pass
 
-    def create_collage(self, screenshots: List[Dict]) -> None:
+    def create_category_collages(self, screenshots: List[Dict]) -> None:
         try:
             screenshots = [s for s in screenshots if s is not None]
-
             if not screenshots:
-                logging.error("No valid screenshots to create collage")
+                logging.error("No valid screenshots to create collages")
                 return
 
-            collage_width = 3600
-            collage_height = 2400
-            collage = Image.new('RGB', (collage_width, collage_height), 'white')
-            draw = ImageDraw.Draw(collage)
+            categories = {
+                'Desktop_Monitors': {
+                    'title': 'Desktop Monitors',
+                    'devices': ['desktop-fhd', 'desktop-2k', 'desktop-4k', 'desktop-laptop', 'desktop-laptop-hd']
+                },
+                'MacBooks': {
+                    'title': 'Apple MacBooks',
+                    'devices': ['macbook-pro-15', 'macbook-pro-13']
+                },
+                'iPads': {
+                    'title': 'Apple iPads',
+                    'devices': ['ipad-pro-12.9', 'ipad-pro-11', 'ipad-10.9']
+                },
+                'Android_Tablets': {
+                    'title': 'Android Tablets',
+                    'devices': ['samsung-tab-s9', 'lenovo-tab-p12', 'xiaomi-pad-6']
+                },
+                'iPhones': {
+                    'title': 'Apple iPhones',
+                    'devices': ['iphone-15-pro-max', 'iphone-15-pro', 'iphone-15']
+                },
+                'Android_Phones': {
+                    'title': 'Android Phones',
+                    'devices': ['samsung-s24-ultra', 'samsung-s24', 'pixel-8-pro', 'oneplus-12']
+                }
+            }
 
-            try:
-                font = ImageFont.truetype("arial.ttf", 20)
-            except OSError:
-                font = ImageFont.load_default()
+            device_names = {
+                # Desktop Monitors
+                'desktop-fhd': 'Full HD (1920×1080)',
+                'desktop-2k': 'QHD (2560×1440)',
+                'desktop-4k': '4K UHD (3840×2160)',
+                'desktop-laptop': 'Laptop (1366×768)',
+                'desktop-laptop-hd': 'Laptop HD+ (1536×864)',
 
-            for i, screenshot in enumerate(screenshots):
-                row = i // 3
-                col = i % 3
-                x = col * 1200 + 100
-                y = row * 800 + 50
+                # MacBooks
+                'macbook-pro-15': 'MacBook Pro 15" (2880×1800)',
+                'macbook-pro-13': 'MacBook Pro 13" (2560×1600)',
 
-                try:
-                    with Image.open(screenshot["path"]) as img:
-                        scale = min(
-                            1000 / screenshot["width"],
-                            700 / screenshot["height"]
-                        )
-                        new_width = int(screenshot["width"] * scale)
-                        new_height = int(screenshot["height"] * scale)
-                        img_resized = img.resize(
-                            (new_width, new_height),
-                            Image.Resampling.LANCZOS
-                        )
-                        collage.paste(img_resized, (x, y))
+                # iPads
+                'ipad-pro-12.9': 'iPad Pro 12.9" (2732×2048)',
+                'ipad-pro-11': 'iPad Pro 11" (2388×1668)',
+                'ipad-10.9': 'iPad Air 10.9" (2048×1536)',
 
-                        text = f"{screenshot['name']} ({screenshot['physical_width']}x{screenshot['physical_height']}, DPR: {screenshot['dpr']}x)"
-                        draw.text((x, y + new_height + 10), text, fill='#333333', font=font)
-                except Exception as e:
-                    logging.error(f"Error processing image {screenshot['name']}: {str(e)}")
+                # Android Tablets
+                'samsung-tab-s9': 'Samsung Tab S9 (2560×1600)',
+                'lenovo-tab-p12': 'Lenovo Tab P12 Pro (2000×1200)',
+                'xiaomi-pad-6': 'Xiaomi Pad 6 (2160×1620)',
+
+                # iPhones
+                'iphone-15-pro-max': 'iPhone 15 Pro Max (1290×2796)',
+                'iphone-15-pro': 'iPhone 15 Pro (1179×2556)',
+                'iphone-15': 'iPhone 15 (1170×2532)',
+
+                # Android Phones
+                'samsung-s24-ultra': 'Samsung S24 Ultra (1440×3088)',
+                'samsung-s24': 'Samsung S24 (1080×2340)',
+                'pixel-8-pro': 'Google Pixel 8 Pro (1080×2400)',
+                'oneplus-12': 'OnePlus 12 (1080×2400)'
+            }
+
+            for category_name, category_info in categories.items():
+                # Filter screenshots for current category
+                category_shots = [
+                    s for s in screenshots
+                    if s['name'] in category_info['devices']
+                ]
+
+                if not category_shots:
                     continue
 
-            collage_path = os.path.join(
-                self.output_dir,
-                "website-responsive-collage.png"
-            )
-            collage.save(collage_path, optimize=True)
-            logging.info(f"Collage saved to: {collage_path}")
+                # Calculate grid dimensions
+                shots_count = len(category_shots)
+                cols = min(3, shots_count)
+                rows = (shots_count + cols - 1) // cols
+
+                # Create collage with appropriate size and title space
+                collage_width = cols * 1200 + 200
+                collage_height = rows * 800 + 150  # Extra space for title
+                collage = Image.new('RGB', (collage_width, collage_height), 'white')
+                draw = ImageDraw.Draw(collage)
+
+                try:
+                    # Try to load larger font for title
+                    title_font = ImageFont.truetype("arial.ttf", 30)
+                    device_font = ImageFont.truetype("arial.ttf", 20)
+                except OSError:
+                    title_font = ImageFont.load_default()
+                    device_font = ImageFont.load_default()
+
+                # Draw category title
+                draw.text((100, 20), category_info['title'], fill='#000000', font=title_font)
+
+                # Sort screenshots by device name
+                category_shots.sort(key=lambda x: device_names.get(x['name'], x['name']))
+
+                # Place screenshots in grid
+                for i, screenshot in enumerate(category_shots):
+                    row = i // cols
+                    col = i % cols
+                    x = col * 1200 + 100
+                    y = row * 800 + 100  # Start from 100px to account for title
+
+                    try:
+                        with Image.open(screenshot["path"]) as img:
+                            scale = min(
+                                1000 / screenshot["width"],
+                                700 / screenshot["height"]
+                            )
+                            new_width = int(screenshot["width"] * scale)
+                            new_height = int(screenshot["height"] * scale)
+                            img_resized = img.resize(
+                                (new_width, new_height),
+                                Image.Resampling.LANCZOS
+                            )
+                            collage.paste(img_resized, (x, y))
+
+                            # Use friendly device name
+                            device_name = device_names.get(screenshot['name'], screenshot['name'])
+                            text = f"{device_name} (DPR: {screenshot['dpr']}x)"
+                            draw.text((x, y + new_height + 10), text, fill='#333333', font=device_font)
+                    except Exception as e:
+                        logging.error(f"Error processing image {screenshot['name']}: {str(e)}")
+                        continue
+
+                # Save category collage
+                collage_path = os.path.join(
+                    self.output_dir,
+                    f"collage_{category_name}.png"
+                )
+                collage.save(collage_path, optimize=True)
+                logging.info(f"{category_name} collage saved to: {collage_path}")
 
         except Exception as e:
-            logging.error(f"Error creating collage: {str(e)}")
+            logging.error(f"Error creating category collages: {str(e)}")
 
     def process_website(self, url: str) -> None:
         logging.info(f"Starting capture for: {url}")
@@ -248,11 +360,12 @@ class WebsiteScreenshotter:
                 except Exception as e:
                     logging.error(f"Error processing {viewport.name}: {str(e)}")
 
-        if screenshots:
-            self.create_collage(screenshots)
-            logging.info("Process completed successfully")
-        else:
-            logging.error("No screenshots were captured successfully")
+            if screenshots:
+                # Create category collages
+                self.create_category_collages(screenshots)
+                logging.info("Process completed successfully")
+            else:
+                logging.error("No screenshots were captured successfully")
 
 
 def main():
