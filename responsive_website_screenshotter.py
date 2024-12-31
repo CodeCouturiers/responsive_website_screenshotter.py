@@ -11,7 +11,7 @@ from typing import List, Dict
 from dataclasses import dataclass
 import time
 from selenium.common.exceptions import WebDriverException
-
+from PIL import ImageFilter
 
 @dataclass
 class Viewport:
@@ -369,92 +369,95 @@ class WebsiteScreenshotter:
                 logging.error("No valid screenshots to create collages")
                 return
 
-            # Define categories and device names inside the method
             categories = {
                 'Desktop_Monitors': {
                     'title': 'Desktop Monitors',
+                    'subtitle': 'Display Resolutions Showcase',
                     'devices': ['desktop-fhd', 'desktop-2k', 'desktop-4k', 'desktop-laptop', 'desktop-laptop-hd']
                 },
                 'MacBooks': {
-                    'title': 'Apple MacBooks',
+                    'title': 'MacBook Pro',
+                    'subtitle': 'Retina Display Collection',
                     'devices': ['macbook-pro-15', 'macbook-pro-13']
                 },
                 'iPads': {
-                    'title': 'Apple iPads',
+                    'title': 'iPad Collection',
+                    'subtitle': 'Liquid Retina Displays',
                     'devices': ['ipad-pro-12.9', 'ipad-pro-11', 'ipad-10.9']
                 },
                 'Android_Tablets': {
                     'title': 'Android Tablets',
+                    'subtitle': 'Premium Display Series',
                     'devices': ['samsung-tab-s9', 'lenovo-tab-p12', 'xiaomi-pad-6']
                 },
                 'iPhones': {
-                    'title': 'Apple iPhones',
+                    'title': 'iPhone 15 Series',
+                    'subtitle': 'Super Retina XDR',
                     'devices': ['iphone-15-pro-max', 'iphone-15-pro', 'iphone-15']
                 },
                 'Android_Phones': {
-                    'title': 'Android Phones',
+                    'title': 'Android Flagships',
+                    'subtitle': 'Premium Display Collection',
                     'devices': ['samsung-s24-ultra', 'samsung-s24', 'pixel-8-pro', 'oneplus-12']
                 }
             }
 
             device_names = {
                 # Desktop Monitors
-                'desktop-fhd': 'Full HD (1920×1080)',
-                'desktop-2k': 'QHD (2560×1440)',
-                'desktop-4k': '4K UHD (3840×2160)',
-                'desktop-laptop': 'Laptop (1366×768)',
-                'desktop-laptop-hd': 'Laptop HD+ (1536×864)',
+                'desktop-fhd': '1920×1080 FHD',
+                'desktop-2k': '2560×1440 QHD',
+                'desktop-4k': '3840×2160 4K',
+                'desktop-laptop': '1366×768',
+                'desktop-laptop-hd': '1536×864',
 
                 # MacBooks
-                'macbook-pro-15': 'MacBook Pro 15" (2880×1800)',
-                'macbook-pro-13': 'MacBook Pro 13" (2560×1600)',
+                'macbook-pro-15': 'MacBook Pro 15″',
+                'macbook-pro-13': 'MacBook Pro 13″',
 
                 # iPads
-                'ipad-pro-12.9': 'iPad Pro 12.9" (2732×2048)',
-                'ipad-pro-11': 'iPad Pro 11" (2388×1668)',
-                'ipad-10.9': 'iPad Air 10.9" (2048×1536)',
+                'ipad-pro-12.9': 'iPad Pro 12.9″',
+                'ipad-pro-11': 'iPad Pro 11″',
+                'ipad-10.9': 'iPad Air',
 
                 # Android Tablets
-                'samsung-tab-s9': 'Samsung Tab S9 (2560×1600)',
-                'lenovo-tab-p12': 'Lenovo Tab P12 Pro (2000×1200)',
-                'xiaomi-pad-6': 'Xiaomi Pad 6 (2160×1620)',
+                'samsung-tab-s9': 'Galaxy Tab S9',
+                'lenovo-tab-p12': 'Tab P12 Pro',
+                'xiaomi-pad-6': 'Pad 6',
 
                 # iPhones
-                'iphone-15-pro-max': 'iPhone 15 Pro Max (1290×2796)',
-                'iphone-15-pro': 'iPhone 15 Pro (1179×2556)',
-                'iphone-15': 'iPhone 15 (1170×2532)',
+                'iphone-15-pro-max': 'iPhone 15 Pro Max',
+                'iphone-15-pro': 'iPhone 15 Pro',
+                'iphone-15': 'iPhone 15',
 
                 # Android Phones
-                'samsung-s24-ultra': 'Samsung S24 Ultra (1440×3088)',
-                'samsung-s24': 'Samsung S24 (1080×2340)',
-                'pixel-8-pro': 'Google Pixel 8 Pro (1080×2400)',
-                'oneplus-12': 'OnePlus 12 (1080×2400)'
+                'samsung-s24-ultra': 'Galaxy S24 Ultra',
+                'samsung-s24': 'Galaxy S24',
+                'pixel-8-pro': 'Pixel 8 Pro',
+                'oneplus-12': 'OnePlus 12'
             }
 
-            # Modern color scheme
             COLORS = {
                 'background': '#FFFFFF',
-                'text_primary': '#191919',
+                'card_background': '#FFFFFF',
+                'text_primary': '#000000',
                 'text_secondary': '#666666',
-                'accent': '#0057FF',
-                'divider': '#E8E8E8'
+                'border': '#EAEAEA',
+                'shadow': (0, 0, 0, 15),  # RGBA for shadows
             }
 
-            # Enhanced typography and spacing
             TYPOGRAPHY = {
-                'title_size': 48,
+                'title_size': 64,
                 'subtitle_size': 24,
-                'caption_size': 16,
-                'spacing': 40
+                'device_name_size': 20,
+                'specs_size': 14
             }
 
-            # Font paths for different operating systems
             FONT_PATHS = {
                 'windows': {
                     'regular': 'C:/Windows/Fonts/arial.ttf',
                     'bold': 'C:/Windows/Fonts/arialbd.ttf'
                 },
-                'darwin': {  # macOS
+                'darwin': {
                     'regular': '/System/Library/Fonts/Helvetica.ttc',
                     'bold': '/System/Library/Fonts/Helvetica-Bold.ttf'
                 },
@@ -464,74 +467,73 @@ class WebsiteScreenshotter:
                 }
             }
 
-            # Determine OS and set font paths
             import platform
             system = platform.system().lower()
-            if system in FONT_PATHS:
-                font_paths = FONT_PATHS[system]
-            else:
-                font_paths = FONT_PATHS['windows']  # Default to Windows paths
+            font_paths = FONT_PATHS.get(system, FONT_PATHS['windows'])
 
-            # Load fonts with error handling and fallbacks
             try:
-                # First try loading system fonts
                 title_font = ImageFont.truetype(font_paths['bold'], TYPOGRAPHY['title_size'])
                 subtitle_font = ImageFont.truetype(font_paths['regular'], TYPOGRAPHY['subtitle_size'])
-                caption_font = ImageFont.truetype(font_paths['regular'], TYPOGRAPHY['caption_size'])
+                device_font = ImageFont.truetype(font_paths['bold'], TYPOGRAPHY['device_name_size'])
+                specs_font = ImageFont.truetype(font_paths['regular'], TYPOGRAPHY['specs_size'])
             except Exception as e:
                 logging.warning(f"Failed to load system fonts: {e}")
-                try:
-                    # Try loading from the current directory
-                    title_font = ImageFont.truetype("Arial.ttf", TYPOGRAPHY['title_size'])
-                    subtitle_font = ImageFont.truetype("Arial.ttf", TYPOGRAPHY['subtitle_size'])
-                    caption_font = ImageFont.truetype("Arial.ttf", TYPOGRAPHY['caption_size'])
-                except Exception as e:
-                    logging.warning(f"Failed to load local fonts: {e}")
-                    # Fall back to default font
-                    title_font = ImageFont.load_default()
-                    subtitle_font = ImageFont.load_default()
-                    caption_font = ImageFont.load_default()
+                title_font = ImageFont.load_default()
+                subtitle_font = ImageFont.load_default()
+                device_font = ImageFont.load_default()
+                specs_font = ImageFont.load_default()
 
-            def draw_text_with_encoding(draw, position, text, font, fill):
-                """Helper function to draw text with proper encoding"""
-                try:
-                    # Try drawing with default encoding
-                    draw.text(position, text, font=font, fill=fill)
-                except UnicodeEncodeError:
-                    # If default encoding fails, try UTF-8
-                    encoded_text = text.encode('utf-8', 'ignore').decode('utf-8')
-                    draw.text(position, encoded_text, font=font, fill=fill)
+            def draw_text(draw, position, text, font, color, align='left', max_width=None):
+                bbox = font.getbbox(text)
+                text_width = bbox[2] - bbox[0]
+
+                x, y = position
+                if align == 'center' and max_width:
+                    x = x + (max_width - text_width) // 2
+
+                draw.text((x, y), text, font=font, fill=color)
+                return bbox[3] - bbox[1]
 
             for category_name, category_info in categories.items():
                 category_shots = [s for s in screenshots if s['name'] in category_info['devices']]
                 if not category_shots:
                     continue
 
-                # Calculate Behance-style grid layout
-                margin = 60
-                gutter = 30
-                card_width = 1200
-                card_height = 900
+                # Layout settings
+                margin = 80
+                gutter = 40
+                header_height = 200
+                card_padding = 40
 
-                cols = min(2, len(category_shots))  # Behance typically uses 2 columns
+                # Calculate maximum aspect ratio
+                max_ratio = max(s["height"] / s["width"] for s in category_shots)
+
+                # Calculate card dimensions
+                cols = min(2, len(category_shots))
+                card_width = int((3000 - (2 * margin) - ((cols - 1) * gutter)) / cols)
+                image_width = card_width - (card_padding * 2)
+                image_height = int(image_width * max_ratio)
+                text_area_height = 100
+                card_height = card_padding + image_height + text_area_height + card_padding
+
+                # Calculate canvas size
                 rows = (len(category_shots) + cols - 1) // cols
-
-                # Create large canvas with room for header and description
                 canvas_width = margin * 2 + card_width * cols + gutter * (cols - 1)
                 canvas_height = (
-                        margin * 2 +  # Top and bottom margins
-                        150 +  # Header space
-                        100 +  # Description space
-                        (card_height * rows) + (gutter * (rows - 1))
+                        margin +
+                        header_height +
+                        (card_height * rows) +
+                        (gutter * (rows - 1)) +
+                        margin
                 )
 
-                # Create canvas with white background
+                # Create canvas
                 canvas = Image.new('RGB', (canvas_width, canvas_height), COLORS['background'])
                 draw = ImageDraw.Draw(canvas)
 
-                # Draw header section with Behance-style typography
+                # Draw header
                 header_y = margin
-                draw_text_with_encoding(
+                title_height = draw_text(
                     draw,
                     (margin, header_y),
                     category_info['title'],
@@ -539,93 +541,91 @@ class WebsiteScreenshotter:
                     COLORS['text_primary']
                 )
 
-                # Add category description
-                description_y = header_y + TYPOGRAPHY['title_size'] + 20
-                draw_text_with_encoding(
+                # Draw subtitle
+                subtitle_y = header_y + title_height + 20
+                draw_text(
                     draw,
-                    (margin, description_y),
-                    f"Responsive design showcase for {category_info['title']} devices",
+                    (margin, subtitle_y),
+                    category_info['subtitle'],
                     subtitle_font,
                     COLORS['text_secondary']
                 )
 
-                # Draw subtle divider line
-                divider_y = description_y + TYPOGRAPHY['subtitle_size'] + 30
-                draw.line(
-                    (margin, divider_y, canvas_width - margin, divider_y),
-                    fill=COLORS['divider'],
-                    width=2
-                )
-
-                # Place screenshots in grid with enhanced styling
-                content_start_y = divider_y + 50
+                # Draw cards
                 for idx, screenshot in enumerate(category_shots):
                     row = idx // cols
                     col = idx % cols
 
                     x = margin + (card_width + gutter) * col
-                    y = content_start_y + (card_height + gutter) * row
+                    y = margin + header_height + (card_height + gutter) * row
 
                     try:
                         with Image.open(screenshot["path"]) as img:
-                            # Calculate dimensions maintaining aspect ratio
-                            display_width = card_width - 60  # Padding inside card
+                            # Create card with shadow
+                            shadow_size = 2
+                            shadow = Image.new('RGBA', (card_width + shadow_size * 2, card_height + shadow_size * 2),
+                                               COLORS['shadow'])
+                            shadow = shadow.filter(ImageFilter.GaussianBlur(2))
+                            canvas.paste(shadow, (x - shadow_size, y - shadow_size), shadow)
+
+                            # Create and paste card background
+                            card = Image.new('RGB', (card_width, card_height), COLORS['card_background'])
+                            canvas.paste(card, (x, y))
+
+                            # Draw card border
+                            draw.rectangle(
+                                [x, y, x + card_width - 1, y + card_height - 1],
+                                outline=COLORS['border'],
+                                width=1
+                            )
+
+                            # Calculate and draw screenshot
+                            display_width = image_width
                             scale = display_width / screenshot["width"]
                             display_height = int(screenshot["height"] * scale)
 
-                            # Resize screenshot
                             img_resized = img.resize(
                                 (display_width, display_height),
                                 Image.Resampling.LANCZOS
                             )
 
-                            # Create card background
-                            card = Image.new('RGB', (card_width, card_height), COLORS['background'])
-                            card_draw = ImageDraw.Draw(card)
+                            # Center the screenshot in card
+                            img_x = x + (card_width - display_width) // 2
+                            img_y = y + card_padding
+                            canvas.paste(img_resized, (img_x, img_y))
 
-                            # Center screenshot in card
-                            img_x = (card_width - display_width) // 2
-                            img_y = 30  # Top padding
-                            card.paste(img_resized, (img_x, img_y))
-
-                            # Add device info with enhanced typography
+                            # Draw device info
                             device_name = device_names.get(screenshot['name'], screenshot['name'])
-                            info_y = img_y + display_height + 20
+                            info_y = img_y + display_height + 25
 
                             # Device name
-                            draw_text_with_encoding(
-                                card_draw,
-                                (30, info_y),
+                            draw_text(
+                                draw,
+                                (img_x, info_y),
                                 device_name,
-                                subtitle_font,
-                                COLORS['text_primary']
+                                device_font,
+                                COLORS['text_primary'],
+                                'center',
+                                display_width
                             )
 
                             # Technical specs
-                            specs_text = f"Resolution: {screenshot['width']}×{screenshot['height']} • DPR: {screenshot['dpr']}x"
-                            draw_text_with_encoding(
-                                card_draw,
-                                (30, info_y + TYPOGRAPHY['subtitle_size'] + 10),
+                            specs_text = f"{screenshot['width']}×{screenshot['height']} @ {screenshot['dpr']}x"
+                            draw_text(
+                                draw,
+                                (img_x, info_y + 30),
                                 specs_text,
-                                caption_font,
-                                COLORS['text_secondary']
+                                specs_font,
+                                COLORS['text_secondary'],
+                                'center',
+                                display_width
                             )
-
-                            # Add subtle border to card
-                            card_draw.rectangle(
-                                [0, 0, card_width - 1, card_height - 1],
-                                outline=COLORS['divider'],
-                                width=1
-                            )
-
-                            # Paste card onto main canvas
-                            canvas.paste(card, (x, y))
 
                     except Exception as e:
                         logging.error(f"Error processing image {screenshot['name']}: {str(e)}")
                         continue
 
-                # Save optimized collage
+                # Save collage
                 collage_path = os.path.join(
                     self.output_dir,
                     f"collage_{category_name}.png"
