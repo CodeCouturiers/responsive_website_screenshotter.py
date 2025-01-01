@@ -179,7 +179,25 @@ class WebsiteScreenshotter:
                  "Mozilla/5.0 (iPhone; CPU iPhone OS 10_3_3 like Mac OS X) AppleWebKit/603.3.8 (KHTML, like Gecko) Version/10.3.3 Mobile/14G60 Safari/602.1"),
         Viewport(640, 1136, "iphone-5", 2.0,
                  "Mozilla/5.0 (iPhone; CPU iPhone OS 10_3_3 like Mac OS X) AppleWebKit/603.3.8 (KHTML, like Gecko) Version/10.3.3 Mobile/14G60 Safari/602.1"),
-
+        # POCO Phones (2024-2023)
+        Viewport(1220, 2712, "poco-x6-pro", 3.0,  # Released January 2024
+                 "Mozilla/5.0 (Linux; Android 14; 23113RKC6G) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/121.0.0.0 Mobile Safari/537.36"),
+        Viewport(1080, 2400, "poco-x6", 2.5,  # Released January 2024
+                 "Mozilla/5.0 (Linux; Android 14; 23122PCD1G) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/121.0.0.0 Mobile Safari/537.36"),
+        Viewport(1080, 2460, "poco-m6-pro", 2.5,  # Released August 2023
+                 "Mozilla/5.0 (Linux; Android 13; 23053RN02A) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/121.0.0.0 Mobile Safari/537.36"),
+        Viewport(1080, 2400, "poco-m6", 2.5,  # Released September 2023
+                 "Mozilla/5.0 (Linux; Android 13; 23053RN02A) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/121.0.0.0 Mobile Safari/537.36"),
+        Viewport(1080, 2400, "poco-m5s", 2.5,  # Released March 2023
+                 "Mozilla/5.0 (Linux; Android 13; 22031116BG) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/121.0.0.0 Mobile Safari/537.36"),
+        Viewport(1080, 2400, "poco-f5-pro", 2.5,  # Released May 2023
+                 "Mozilla/5.0 (Linux; Android 13; 23013PC75G) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/121.0.0.0 Mobile Safari/537.36"),
+        Viewport(1080, 2400, "poco-f5", 2.5,  # Released May 2023
+                 "Mozilla/5.0 (Linux; Android 13; 23049PCD8G) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/121.0.0.0 Mobile Safari/537.36"),
+        Viewport(1220, 2712, "poco-x5-pro", 3.0,  # Released February 2023
+                 "Mozilla/5.0 (Linux; Android 13; 22101320G) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/121.0.0.0 Mobile Safari/537.36"),
+        Viewport(1080, 2400, "poco-x5", 2.5,  # Released February 2023
+                 "Mozilla/5.0 (Linux; Android 13; 22111317PG) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/121.0.0.0 Mobile Safari/537.36"),
         # Popular Smartphones
         Viewport(1440, 3088, "samsung-s24-ultra", 3.0,
                  "Mozilla/5.0 (Linux; Android 14; SM-S928B) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/121.0.0.0 Mobile Safari/537.36"),
@@ -570,6 +588,21 @@ class WebsiteScreenshotter:
                     'subtitle': 'Flagship & Mid-Range Collection',
                     'devices': ['samsung-s24-ultra', 'samsung-s24', 'samsung-a54', 'pixel-8-pro', 'oneplus-12']
                 },
+                'POCO_Phones': {
+                    'title': 'POCO Smartphones',
+                    'subtitle': 'Latest POCO Models (2024-2023)',
+                    'devices': [
+                        'poco-x6-pro',
+                        'poco-x6',
+                        'poco-m6-pro',
+                        'poco-m6',
+                        'poco-m5s',
+                        'poco-f5-pro',
+                        'poco-f5',
+                        'poco-x5-pro',
+                        'poco-x5'
+                    ]
+                },
                 'Design_Presentations': {
                     'title': 'Design Presentations',
                     'subtitle': 'Portfolio & Showcase Formats',
@@ -664,6 +697,17 @@ class WebsiteScreenshotter:
                 'iphone-5s': 'iPhone 5s',
                 'iphone-5c': 'iPhone 5c',
                 'iphone-5': 'iPhone 5',
+
+                # POCO Phones
+                'poco-x6-pro': 'POCO X6 Pro 5G',
+                'poco-x6': 'POCO X6 5G',
+                'poco-m6-pro': 'POCO M6 Pro 5G',
+                'poco-m6': 'POCO M6',
+                'poco-m5s': 'POCO M5s',
+                'poco-f5-pro': 'POCO F5 Pro 5G',
+                'poco-f5': 'POCO F5 5G',
+                'poco-x5-pro': 'POCO X5 Pro 5G',
+                'poco-x5': 'POCO X5 5G',
 
                 # Android Phones
                 'samsung-s24-ultra': 'Galaxy S24 Ultra',
