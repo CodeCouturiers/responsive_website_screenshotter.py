@@ -13,6 +13,7 @@ import time
 from selenium.common.exceptions import WebDriverException
 from PIL import ImageFilter
 
+
 @dataclass
 class Viewport:
     width: int
@@ -24,6 +25,39 @@ class Viewport:
 
 class WebsiteScreenshotter:
     VIEWPORTS = [
+        # Presentation & Portfolio Displays
+        Viewport(1440, 1024, "presentation-standard", 1.0,
+                 "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/121.0.0.0 Safari/537.36"),
+        Viewport(1680, 1050, "presentation-wide", 1.0,
+                 "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/121.0.0.0 Safari/537.36"),
+        Viewport(1200, 900, "dribbble-shot", 2.0,
+                 "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/121.0.0.0 Safari/537.36"),
+        Viewport(1600, 1200, "behance-project", 2.0,
+                 "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/121.0.0.0 Safari/537.36"),
+
+        # Common Design Presentation Formats
+        Viewport(1280, 720, "hd-preview", 1.0,
+                 "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/121.0.0.0 Safari/537.36"),
+        Viewport(1920, 1080, "fullhd-preview", 1.0,
+                 "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/121.0.0.0 Safari/537.36"),
+
+        # Popular Aspect Ratios
+        Viewport(1500, 1000, "3-2-ratio", 1.0,
+                 "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/121.0.0.0 Safari/537.36"),
+        Viewport(1600, 900, "16-9-ratio", 1.0,
+                 "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/121.0.0.0 Safari/537.36"),
+
+        Viewport(2560, 1600, "macbook-air-15", 2.0,
+                 "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/17.2.1 Safari/605.1.15"),
+        Viewport(2304, 1440, "macbook-air-13", 2.0,
+                 "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/17.2.1 Safari/605.1.15"),
+
+        Viewport(2360, 1640, "ipad-air-5", 2.0,
+                 "Mozilla/5.0 (iPad; CPU OS 17_2_1 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/17.2 Mobile/15E148 Safari/604.1"),
+
+        Viewport(1080, 2340, "samsung-a54", 2.5,
+                 "Mozilla/5.0 (Linux; Android 14; SM-A546B) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/121.0.0.0 Mobile Safari/537.36"),
+
         # Desktop (Most common desktop resolutions in 2024)
         Viewport(1920, 1080, "desktop-fhd", 1.0,
                  "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/121.0.0.0 Safari/537.36"),
@@ -56,13 +90,97 @@ class WebsiteScreenshotter:
         Viewport(2160, 1620, "xiaomi-pad-6", 1.5,
                  "Mozilla/5.0 (Linux; Android 13; 23043RP34G) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/121.0.0.0 Safari/537.36"),
 
-        # Popular Smartphones
+        # Modern iPhones (2024-2023)
         Viewport(1290, 2796, "iphone-15-pro-max", 3.0,
                  "Mozilla/5.0 (iPhone; CPU iPhone OS 17_2_1 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/17.2 Mobile/15E148 Safari/604.1"),
         Viewport(1179, 2556, "iphone-15-pro", 3.0,
                  "Mozilla/5.0 (iPhone; CPU iPhone OS 17_2_1 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/17.2 Mobile/15E148 Safari/604.1"),
+        Viewport(1179, 2556, "iphone-15-plus", 3.0,
+                 "Mozilla/5.0 (iPhone; CPU iPhone OS 17_2_1 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/17.2 Mobile/15E148 Safari/604.1"),
         Viewport(1170, 2532, "iphone-15", 3.0,
                  "Mozilla/5.0 (iPhone; CPU iPhone OS 17_2_1 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/17.2 Mobile/15E148 Safari/604.1"),
+
+        # iPhone 14 Series (2022-2023)
+        Viewport(1290, 2796, "iphone-14-pro-max", 3.0,
+                 "Mozilla/5.0 (iPhone; CPU iPhone OS 17_2_1 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/17.2 Mobile/15E148 Safari/604.1"),
+        Viewport(1179, 2556, "iphone-14-pro", 3.0,
+                 "Mozilla/5.0 (iPhone; CPU iPhone OS 17_2_1 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/17.2 Mobile/15E148 Safari/604.1"),
+        Viewport(1284, 2778, "iphone-14-plus", 3.0,
+                 "Mozilla/5.0 (iPhone; CPU iPhone OS 17_2_1 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/17.2 Mobile/15E148 Safari/604.1"),
+        Viewport(1170, 2532, "iphone-14", 3.0,
+                 "Mozilla/5.0 (iPhone; CPU iPhone OS 17_2_1 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/17.2 Mobile/15E148 Safari/604.1"),
+
+        # iPhone 13 Series (2021-2022)
+        Viewport(1284, 2778, "iphone-13-pro-max", 3.0,
+                 "Mozilla/5.0 (iPhone; CPU iPhone OS 17_2_1 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/17.2 Mobile/15E148 Safari/604.1"),
+        Viewport(1170, 2532, "iphone-13-pro", 3.0,
+                 "Mozilla/5.0 (iPhone; CPU iPhone OS 17_2_1 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/17.2 Mobile/15E148 Safari/604.1"),
+        Viewport(1170, 2532, "iphone-13", 3.0,
+                 "Mozilla/5.0 (iPhone; CPU iPhone OS 17_2_1 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/17.2 Mobile/15E148 Safari/604.1"),
+        Viewport(1080, 2340, "iphone-13-mini", 3.0,
+                 "Mozilla/5.0 (iPhone; CPU iPhone OS 17_2_1 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/17.2 Mobile/15E148 Safari/604.1"),
+
+        # iPhone 12 Series (2020-2021)
+        Viewport(1284, 2778, "iphone-12-pro-max", 3.0,
+                 "Mozilla/5.0 (iPhone; CPU iPhone OS 17_2_1 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/17.2 Mobile/15E148 Safari/604.1"),
+        Viewport(1170, 2532, "iphone-12-pro", 3.0,
+                 "Mozilla/5.0 (iPhone; CPU iPhone OS 17_2_1 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/17.2 Mobile/15E148 Safari/604.1"),
+        Viewport(1170, 2532, "iphone-12", 3.0,
+                 "Mozilla/5.0 (iPhone; CPU iPhone OS 17_2_1 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/17.2 Mobile/15E148 Safari/604.1"),
+        Viewport(1080, 2340, "iphone-12-mini", 3.0,
+                 "Mozilla/5.0 (iPhone; CPU iPhone OS 17_2_1 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/17.2 Mobile/15E148 Safari/604.1"),
+
+        # iPhone 11 Series (2019-2020)
+        Viewport(1242, 2688, "iphone-11-pro-max", 3.0,
+                 "Mozilla/5.0 (iPhone; CPU iPhone OS 16_7_2 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/16.7 Mobile/15E148 Safari/604.1"),
+        Viewport(1125, 2436, "iphone-11-pro", 3.0,
+                 "Mozilla/5.0 (iPhone; CPU iPhone OS 16_7_2 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/16.7 Mobile/15E148 Safari/604.1"),
+        Viewport(828, 1792, "iphone-11", 2.0,
+                 "Mozilla/5.0 (iPhone; CPU iPhone OS 16_7_2 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/16.7 Mobile/15E148 Safari/604.1"),
+
+        # iPhone XS/XR Series (2018-2019)
+        Viewport(1242, 2688, "iphone-xs-max", 3.0,
+                 "Mozilla/5.0 (iPhone; CPU iPhone OS 16_7_2 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/16.7 Mobile/15E148 Safari/604.1"),
+        Viewport(1125, 2436, "iphone-xs", 3.0,
+                 "Mozilla/5.0 (iPhone; CPU iPhone OS 16_7_2 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/16.7 Mobile/15E148 Safari/604.1"),
+        Viewport(828, 1792, "iphone-xr", 2.0,
+                 "Mozilla/5.0 (iPhone; CPU iPhone OS 16_7_2 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/16.7 Mobile/15E148 Safari/604.1"),
+
+        # iPhone X (2017-2018)
+        Viewport(1125, 2436, "iphone-x", 3.0,
+                 "Mozilla/5.0 (iPhone; CPU iPhone OS 16_7_2 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/16.7 Mobile/15E148 Safari/604.1"),
+
+        # iPhone 8 Series (2017)
+        Viewport(1080, 1920, "iphone-8-plus", 3.0,
+                 "Mozilla/5.0 (iPhone; CPU iPhone OS 15_8 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/15.8 Mobile/15E148 Safari/604.1"),
+        Viewport(750, 1334, "iphone-8", 2.0,
+                 "Mozilla/5.0 (iPhone; CPU iPhone OS 15_8 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/15.8 Mobile/15E148 Safari/604.1"),
+
+        # iPhone 7 Series (2016)
+        Viewport(1080, 1920, "iphone-7-plus", 3.0,
+                 "Mozilla/5.0 (iPhone; CPU iPhone OS 15_8 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/15.8 Mobile/15E148 Safari/604.1"),
+        Viewport(750, 1334, "iphone-7", 2.0,
+                 "Mozilla/5.0 (iPhone; CPU iPhone OS 15_8 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/15.8 Mobile/15E148 Safari/604.1"),
+
+        # iPhone 6 Series (2014-2015)
+        Viewport(1080, 1920, "iphone-6s-plus", 3.0,
+                 "Mozilla/5.0 (iPhone; CPU iPhone OS 12_5_7 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/12.5.7 Mobile/15E148 Safari/604.1"),
+        Viewport(750, 1334, "iphone-6s", 2.0,
+                 "Mozilla/5.0 (iPhone; CPU iPhone OS 12_5_7 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/12.5.7 Mobile/15E148 Safari/604.1"),
+        Viewport(1080, 1920, "iphone-6-plus", 3.0,
+                 "Mozilla/5.0 (iPhone; CPU iPhone OS 12_5_7 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/12.5.7 Mobile/15E148 Safari/604.1"),
+        Viewport(750, 1334, "iphone-6", 2.0,
+                 "Mozilla/5.0 (iPhone; CPU iPhone OS 12_5_7 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/12.5.7 Mobile/15E148 Safari/604.1"),
+
+        # iPhone 5 Series (2012-2013)
+        Viewport(640, 1136, "iphone-5s", 2.0,
+                 "Mozilla/5.0 (iPhone; CPU iPhone OS 12_5_7 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/12.5.7 Mobile/15E148 Safari/604.1"),
+        Viewport(640, 1136, "iphone-5c", 2.0,
+                 "Mozilla/5.0 (iPhone; CPU iPhone OS 10_3_3 like Mac OS X) AppleWebKit/603.3.8 (KHTML, like Gecko) Version/10.3.3 Mobile/14G60 Safari/602.1"),
+        Viewport(640, 1136, "iphone-5", 2.0,
+                 "Mozilla/5.0 (iPhone; CPU iPhone OS 10_3_3 like Mac OS X) AppleWebKit/603.3.8 (KHTML, like Gecko) Version/10.3.3 Mobile/14G60 Safari/602.1"),
+
+        # Popular Smartphones
         Viewport(1440, 3088, "samsung-s24-ultra", 3.0,
                  "Mozilla/5.0 (Linux; Android 14; SM-S928B) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/121.0.0.0 Mobile Safari/537.36"),
         Viewport(1080, 2340, "samsung-s24", 2.5,
@@ -377,33 +495,98 @@ class WebsiteScreenshotter:
                     'devices': ['desktop-fhd', 'desktop-2k', 'desktop-4k', 'desktop-laptop', 'desktop-laptop-hd']
                 },
                 'MacBooks': {
-                    'title': 'MacBook Pro',
-                    'subtitle': 'Professional Retina Displays',
-                    'devices': ['macbook-pro-15', 'macbook-pro-13']
+                    'title': 'MacBook Collection',
+                    'subtitle': 'Pro & Air Retina Displays',
+                    'devices': ['macbook-pro-15', 'macbook-pro-13', 'macbook-air-15', 'macbook-air-13']
                 },
                 'iPads': {
                     'title': 'iPad Collection',
-                    'subtitle': 'Liquid Retina Technology',
-                    'devices': ['ipad-pro-12.9', 'ipad-pro-11', 'ipad-10.9']
+                    'subtitle': 'Pro & Air Liquid Retina',
+                    'devices': ['ipad-pro-12.9', 'ipad-pro-11', 'ipad-10.9', 'ipad-air-5']
                 },
                 'Android_Tablets': {
                     'title': 'Android Tablets',
                     'subtitle': 'Premium Display Gallery',
                     'devices': ['samsung-tab-s9', 'lenovo-tab-p12', 'xiaomi-pad-6']
                 },
-                'iPhones': {
-                    'title': 'iPhone Series',
-                    'subtitle': 'Super Retina XDR Displays',
-                    'devices': ['iphone-15-pro-max', 'iphone-15-pro', 'iphone-15']
+                'Modern_iPhones': {
+                    'title': 'Modern iPhones (2024-2023)',
+                    'subtitle': 'iPhone 15 Series - Super Retina XDR Displays',
+                    'devices': ['iphone-15-pro-max', 'iphone-15-pro', 'iphone-15-plus', 'iphone-15']
                 },
+                'iPhones_2022_2023': {
+                    'title': 'iPhones 2022-2023',
+                    'subtitle': 'iPhone 14 Series - Super Retina XDR Displays',
+                    'devices': ['iphone-14-pro-max', 'iphone-14-pro', 'iphone-14-plus', 'iphone-14']
+                },
+                'iPhones_2021_2022': {
+                    'title': 'iPhones 2021-2022',
+                    'subtitle': 'iPhone 13 Series - Super Retina XDR Displays',
+                    'devices': ['iphone-13-pro-max', 'iphone-13-pro', 'iphone-13', 'iphone-13-mini']
+                },
+                'iPhones_2020_2021': {
+                    'title': 'iPhones 2020-2021',
+                    'subtitle': 'iPhone 12 Series - Super Retina XDR Displays',
+                    'devices': ['iphone-12-pro-max', 'iphone-12-pro', 'iphone-12', 'iphone-12-mini']
+                },
+                'iPhones_2019_2020': {
+                    'title': 'iPhones 2019-2020',
+                    'subtitle': 'iPhone 11 Series - Liquid Retina HD & Super Retina XDR',
+                    'devices': ['iphone-11-pro-max', 'iphone-11-pro', 'iphone-11']
+                },
+                'iPhones_2018_2019': {
+                    'title': 'iPhones 2018-2019',
+                    'subtitle': 'iPhone XS/XR Series - Super Retina HD & Liquid Retina HD',
+                    'devices': ['iphone-xs-max', 'iphone-xs', 'iphone-xr']
+                },
+                'iPhone_X_2017': {
+                    'title': 'iPhone X (2017)',
+                    'subtitle': 'Super Retina HD Display',
+                    'devices': ['iphone-x']
+                },
+                'iPhones_2017': {
+                    'title': 'iPhone 8 Series (2017)',
+                    'subtitle': 'Retina HD Displays',
+                    'devices': ['iphone-8-plus', 'iphone-8']
+                },
+                'iPhones_2016': {
+                    'title': 'iPhone 7 Series (2016)',
+                    'subtitle': 'Retina HD Displays',
+                    'devices': ['iphone-7-plus', 'iphone-7']
+                },
+                'iPhones_2014_2015': {
+                    'title': 'iPhone 6 Series (2014-2015)',
+                    'subtitle': 'Retina HD Displays',
+                    'devices': ['iphone-6s-plus', 'iphone-6s', 'iphone-6-plus', 'iphone-6']
+                },
+                'iPhones_2012_2013': {
+                    'title': 'iPhone 5 Series (2012-2013)',
+                    'subtitle': 'Retina Displays',
+                    'devices': ['iphone-5s', 'iphone-5c', 'iphone-5']
+                },
+
                 'Android_Phones': {
-                    'title': 'Android Flagships',
-                    'subtitle': 'Next-Gen Display Collection',
-                    'devices': ['samsung-s24-ultra', 'samsung-s24', 'pixel-8-pro', 'oneplus-12']
-                }
+                    'title': 'Android Phones',
+                    'subtitle': 'Flagship & Mid-Range Collection',
+                    'devices': ['samsung-s24-ultra', 'samsung-s24', 'samsung-a54', 'pixel-8-pro', 'oneplus-12']
+                },
+                'Design_Presentations': {
+                    'title': 'Design Presentations',
+                    'subtitle': 'Portfolio & Showcase Formats',
+                    'devices': [
+                        'presentation-standard',
+                        'presentation-wide',
+                        'dribbble-shot',
+                        'behance-project',
+                        'hd-preview',
+                        'fullhd-preview',
+                        '3-2-ratio',
+                        '16-9-ratio'
+                    ]
+                },
             }
 
-            # Friendly device names 
+            # Friendly device names
             device_names = {
                 # Desktop Monitors
                 'desktop-fhd': 'Full HD Display',
@@ -426,16 +609,81 @@ class WebsiteScreenshotter:
                 'lenovo-tab-p12': 'Tab P12 Pro',
                 'xiaomi-pad-6': 'Pad 6',
 
-                # iPhones
+                # iPhone 15 Series
                 'iphone-15-pro-max': 'iPhone 15 Pro Max',
                 'iphone-15-pro': 'iPhone 15 Pro',
+                'iphone-15-plus': 'iPhone 15 Plus',
                 'iphone-15': 'iPhone 15',
+
+                # iPhone 14 Series
+                'iphone-14-pro-max': 'iPhone 14 Pro Max',
+                'iphone-14-pro': 'iPhone 14 Pro',
+                'iphone-14-plus': 'iPhone 14 Plus',
+                'iphone-14': 'iPhone 14',
+
+                # iPhone 13 Series
+                'iphone-13-pro-max': 'iPhone 13 Pro Max',
+                'iphone-13-pro': 'iPhone 13 Pro',
+                'iphone-13': 'iPhone 13',
+                'iphone-13-mini': 'iPhone 13 Mini',
+
+                # iPhone 12 Series
+                'iphone-12-pro-max': 'iPhone 12 Pro Max',
+                'iphone-12-pro': 'iPhone 12 Pro',
+                'iphone-12': 'iPhone 12',
+                'iphone-12-mini': 'iPhone 12 Mini',
+
+                # iPhone 11 Series
+                'iphone-11-pro-max': 'iPhone 11 Pro Max',
+                'iphone-11-pro': 'iPhone 11 Pro',
+                'iphone-11': 'iPhone 11',
+
+                # iPhone XS/XR Series
+                'iphone-xs-max': 'iPhone XS Max',
+                'iphone-xs': 'iPhone XS',
+                'iphone-xr': 'iPhone XR',
+
+                # iPhone X
+                'iphone-x': 'iPhone X',
+
+                # iPhone 8 Series
+                'iphone-8-plus': 'iPhone 8 Plus',
+                'iphone-8': 'iPhone 8',
+
+                # iPhone 7 Series
+                'iphone-7-plus': 'iPhone 7 Plus',
+                'iphone-7': 'iPhone 7',
+
+                # iPhone 6 Series
+                'iphone-6s-plus': 'iPhone 6s Plus',
+                'iphone-6s': 'iPhone 6s',
+                'iphone-6-plus': 'iPhone 6 Plus',
+                'iphone-6': 'iPhone 6',
+
+                # iPhone 5 Series
+                'iphone-5s': 'iPhone 5s',
+                'iphone-5c': 'iPhone 5c',
+                'iphone-5': 'iPhone 5',
 
                 # Android Phones
                 'samsung-s24-ultra': 'Galaxy S24 Ultra',
                 'samsung-s24': 'Galaxy S24',
                 'pixel-8-pro': 'Pixel 8 Pro',
-                'oneplus-12': 'OnePlus 12'
+                'oneplus-12': 'OnePlus 12',
+
+                'macbook-air-15': 'MacBook Air 15"',
+                'macbook-air-13': 'MacBook Air 13"',
+                'ipad-air-5': 'iPad Air 5',
+                'samsung-a54': 'Galaxy A54 5G',
+
+                'presentation-standard': 'Standard Presentation',
+                'presentation-wide': 'Wide Presentation',
+                'dribbble-shot': 'Dribbble Shot',
+                'behance-project': 'Behance Project',
+                'hd-preview': 'HD Preview',
+                'fullhd-preview': 'Full HD Preview',
+                '3-2-ratio': '3:2 Aspect Ratio',
+                '16-9-ratio': '16:9 Aspect Ratio',
             }
 
             # Behance-inspired design system
@@ -508,7 +756,7 @@ class WebsiteScreenshotter:
             def draw_text(draw, pos, text, font, color, align='center', width=None):
                 """
                 Draw text with alignment support
- 
+
                 Args:
                     draw: ImageDraw object
                     pos: (x, y) position tuple
@@ -544,7 +792,7 @@ class WebsiteScreenshotter:
                 card_width = int((3000 - (2 * spacing['margin']) - ((cols - 1) * spacing['gutter'])) / cols)
                 image_width = card_width - (spacing['card_padding'] * 2)
 
-                # Calculate maximum aspect ratio and card height 
+                # Calculate maximum aspect ratio and card height
                 max_ratio = max(s["height"] / s["width"] for s in category_shots)
                 image_height = int(image_width * max_ratio)
                 card_height = spacing['card_padding'] * 2 + image_height + 120
@@ -693,7 +941,7 @@ class WebsiteScreenshotter:
 
 def main():
     OUTPUT_DIR = r"C:\Users\user\Downloads\testScript"  # Change this to your desired output directory
-    URL = "https://codecouturehub.com/"  # Change this to your target URL
+    URL = "https://splice.com/"  # Change this to your target URL
     MAX_WORKERS = 8  # Adjust based on your system's capabilities
 
     screenshotter = WebsiteScreenshotter(
