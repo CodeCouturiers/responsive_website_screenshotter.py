@@ -25,193 +25,196 @@ class Viewport:
 
 class WebsiteScreenshotter:
     VIEWPORTS = [
-        # Presentation & Portfolio Displays
-        Viewport(1440, 1024, "presentation-standard", 1.0,
-                 "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/121.0.0.0 Safari/537.36"),
-        Viewport(1680, 1050, "presentation-wide", 1.0,
-                 "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/121.0.0.0 Safari/537.36"),
-        Viewport(1200, 900, "dribbble-shot", 2.0,
-                 "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/121.0.0.0 Safari/537.36"),
-        Viewport(1600, 1200, "behance-project", 2.0,
-                 "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/121.0.0.0 Safari/537.36"),
+        # # Presentation & Portfolio Displays
+        # Viewport(1440, 1024, "presentation-standard", 1.0,
+        #          "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/121.0.0.0 Safari/537.36"),
+        # Viewport(1680, 1050, "presentation-wide", 1.0,
+        #          "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/121.0.0.0 Safari/537.36"),
+        # Viewport(1200, 900, "dribbble-shot", 2.0,
+        #          "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/121.0.0.0 Safari/537.36"),
+        # Viewport(1600, 1200, "behance-project", 2.0,
+        #          "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/121.0.0.0 Safari/537.36"),
+        #
+        # # Common Design Presentation Formats
+        # Viewport(1280, 720, "hd-preview", 1.0,
+        #          "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/121.0.0.0 Safari/537.36"),
+        # Viewport(1920, 1080, "fullhd-preview", 1.0,
+        #          "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/121.0.0.0 Safari/537.36"),
+        #
+        # # Popular Aspect Ratios
+        # Viewport(1500, 1000, "3-2-ratio", 1.0,
+        #          "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/121.0.0.0 Safari/537.36"),
+        # Viewport(1600, 900, "16-9-ratio", 1.0,
+        #          "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/121.0.0.0 Safari/537.36"),
+        #
+        # Viewport(2560, 1600, "macbook-air-15", 2.0,
+        #          "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/17.2.1 Safari/605.1.15"),
+        # Viewport(2304, 1440, "macbook-air-13", 2.0,
+        #          "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/17.2.1 Safari/605.1.15"),
+        #
+        # Viewport(2360, 1640, "ipad-air-5", 2.0,
+        #          "Mozilla/5.0 (iPad; CPU OS 17_2_1 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/17.2 Mobile/15E148 Safari/604.1"),
+        #
+        # Viewport(1080, 2340, "samsung-a54", 2.5,
+        #          "Mozilla/5.0 (Linux; Android 14; SM-A546B) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/121.0.0.0 Mobile Safari/537.36"),
+        #
+        # # Desktop (Most common desktop resolutions in 2024)
+        # Viewport(1920, 1080, "desktop-fhd", 1.0,
+        #          "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/121.0.0.0 Safari/537.36"),
+        # Viewport(2560, 1440, "desktop-2k", 1.5,
+        #          "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/121.0.0.0 Safari/537.36"),
+        # Viewport(3840, 2160, "desktop-4k", 2.0,
+        #          "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/121.0.0.0 Safari/537.36"),
+        # Viewport(1366, 768, "desktop-laptop", 1.0,
+        #          "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/121.0.0.0 Safari/537.36"),
+        # Viewport(1536, 864, "desktop-laptop-hd", 1.25,
+        #          "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/121.0.0.0 Safari/537.36"),
+        #
+        # # Apple Devices
+        # Viewport(2880, 1800, "macbook-pro-15", 2.0,
+        #          "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/17.2.1 Safari/605.1.15"),
+        # Viewport(2560, 1600, "macbook-pro-13", 2.0,
+        #          "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/17.2.1 Safari/605.1.15"),
+        # Viewport(2732, 2048, "ipad-pro-12.9", 2.0,
+        #          "Mozilla/5.0 (iPad; CPU OS 17_2_1 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/17.2 Mobile/15E148 Safari/604.1"),
+        # Viewport(2388, 1668, "ipad-pro-11", 2.0,
+        #          "Mozilla/5.0 (iPad; CPU OS 17_2_1 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/17.2 Mobile/15E148 Safari/604.1"),
+        # Viewport(2048, 1536, "ipad-10.9", 2.0,
+        #          "Mozilla/5.0 (iPad; CPU OS 17_2_1 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/17.2 Mobile/15E148 Safari/604.1"),
+        #
+        # # Popular Android Tablets
+        # Viewport(2560, 1600, "samsung-tab-s9", 1.5,
+        #          "Mozilla/5.0 (Linux; Android 14; SM-X710) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/121.0.0.0 Safari/537.36"),
+        # Viewport(2000, 1200, "lenovo-tab-p12", 1.5,
+        #          "Mozilla/5.0 (Linux; Android 13; Tab P12 Pro) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/121.0.0.0 Safari/537.36"),
+        # Viewport(2160, 1620, "xiaomi-pad-6", 1.5,
+        #          "Mozilla/5.0 (Linux; Android 13; 23043RP34G) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/121.0.0.0 Safari/537.36"),
+        #
+        # # Modern iPhones (2024-2023)
+        # Viewport(1290, 2796, "iphone-15-pro-max", 3.0,
+        #          "Mozilla/5.0 (iPhone; CPU iPhone OS 17_2_1 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/17.2 Mobile/15E148 Safari/604.1"),
+        # Viewport(1179, 2556, "iphone-15-pro", 3.0,
+        #          "Mozilla/5.0 (iPhone; CPU iPhone OS 17_2_1 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/17.2 Mobile/15E148 Safari/604.1"),
+        # Viewport(1179, 2556, "iphone-15-plus", 3.0,
+        #          "Mozilla/5.0 (iPhone; CPU iPhone OS 17_2_1 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/17.2 Mobile/15E148 Safari/604.1"),
+        # Viewport(1170, 2532, "iphone-15", 3.0,
+        #          "Mozilla/5.0 (iPhone; CPU iPhone OS 17_2_1 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/17.2 Mobile/15E148 Safari/604.1"),
+        #
+        # # iPhone 14 Series (2022-2023)
+        # Viewport(1290, 2796, "iphone-14-pro-max", 3.0,
+        #          "Mozilla/5.0 (iPhone; CPU iPhone OS 17_2_1 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/17.2 Mobile/15E148 Safari/604.1"),
+        # Viewport(1179, 2556, "iphone-14-pro", 3.0,
+        #          "Mozilla/5.0 (iPhone; CPU iPhone OS 17_2_1 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/17.2 Mobile/15E148 Safari/604.1"),
+        # Viewport(1284, 2778, "iphone-14-plus", 3.0,
+        #          "Mozilla/5.0 (iPhone; CPU iPhone OS 17_2_1 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/17.2 Mobile/15E148 Safari/604.1"),
+        # Viewport(1170, 2532, "iphone-14", 3.0,
+        #          "Mozilla/5.0 (iPhone; CPU iPhone OS 17_2_1 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/17.2 Mobile/15E148 Safari/604.1"),
+        #
+        # # iPhone 13 Series (2021-2022)
+        # Viewport(1284, 2778, "iphone-13-pro-max", 3.0,
+        #          "Mozilla/5.0 (iPhone; CPU iPhone OS 17_2_1 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/17.2 Mobile/15E148 Safari/604.1"),
+        # Viewport(1170, 2532, "iphone-13-pro", 3.0,
+        #          "Mozilla/5.0 (iPhone; CPU iPhone OS 17_2_1 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/17.2 Mobile/15E148 Safari/604.1"),
+        # Viewport(1170, 2532, "iphone-13", 3.0,
+        #          "Mozilla/5.0 (iPhone; CPU iPhone OS 17_2_1 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/17.2 Mobile/15E148 Safari/604.1"),
+        # Viewport(1080, 2340, "iphone-13-mini", 3.0,
+        #          "Mozilla/5.0 (iPhone; CPU iPhone OS 17_2_1 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/17.2 Mobile/15E148 Safari/604.1"),
+        #
+        # # iPhone 12 Series (2020-2021)
+        # Viewport(1284, 2778, "iphone-12-pro-max", 3.0,
+        #          "Mozilla/5.0 (iPhone; CPU iPhone OS 17_2_1 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/17.2 Mobile/15E148 Safari/604.1"),
+        # Viewport(1170, 2532, "iphone-12-pro", 3.0,
+        #          "Mozilla/5.0 (iPhone; CPU iPhone OS 17_2_1 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/17.2 Mobile/15E148 Safari/604.1"),
+        # Viewport(1170, 2532, "iphone-12", 3.0,
+        #          "Mozilla/5.0 (iPhone; CPU iPhone OS 17_2_1 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/17.2 Mobile/15E148 Safari/604.1"),
+        # Viewport(1080, 2340, "iphone-12-mini", 3.0,
+        #          "Mozilla/5.0 (iPhone; CPU iPhone OS 17_2_1 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/17.2 Mobile/15E148 Safari/604.1"),
+        #
+        # # iPhone 11 Series (2019-2020)
+        # Viewport(1242, 2688, "iphone-11-pro-max", 3.0,
+        #          "Mozilla/5.0 (iPhone; CPU iPhone OS 16_7_2 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/16.7 Mobile/15E148 Safari/604.1"),
+        # Viewport(1125, 2436, "iphone-11-pro", 3.0,
+        #          "Mozilla/5.0 (iPhone; CPU iPhone OS 16_7_2 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/16.7 Mobile/15E148 Safari/604.1"),
+        # Viewport(828, 1792, "iphone-11", 2.0,
+        #          "Mozilla/5.0 (iPhone; CPU iPhone OS 16_7_2 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/16.7 Mobile/15E148 Safari/604.1"),
+        #
+        # # iPhone XS/XR Series (2018-2019)
+        # Viewport(1242, 2688, "iphone-xs-max", 3.0,
+        #          "Mozilla/5.0 (iPhone; CPU iPhone OS 16_7_2 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/16.7 Mobile/15E148 Safari/604.1"),
+        # Viewport(1125, 2436, "iphone-xs", 3.0,
+        #          "Mozilla/5.0 (iPhone; CPU iPhone OS 16_7_2 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/16.7 Mobile/15E148 Safari/604.1"),
+        # Viewport(828, 1792, "iphone-xr", 2.0,
+        #          "Mozilla/5.0 (iPhone; CPU iPhone OS 16_7_2 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/16.7 Mobile/15E148 Safari/604.1"),
+        #
+        # # iPhone X (2017-2018)
+        # Viewport(1125, 2436, "iphone-x", 3.0,
+        #          "Mozilla/5.0 (iPhone; CPU iPhone OS 16_7_2 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/16.7 Mobile/15E148 Safari/604.1"),
+        #
+        # # iPhone 8 Series (2017)
+        # Viewport(1080, 1920, "iphone-8-plus", 3.0,
+        #          "Mozilla/5.0 (iPhone; CPU iPhone OS 15_8 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/15.8 Mobile/15E148 Safari/604.1"),
+        # Viewport(750, 1334, "iphone-8", 2.0,
+        #          "Mozilla/5.0 (iPhone; CPU iPhone OS 15_8 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/15.8 Mobile/15E148 Safari/604.1"),
+        #
+        # # iPhone 7 Series (2016)
+        # Viewport(1080, 1920, "iphone-7-plus", 3.0,
+        #          "Mozilla/5.0 (iPhone; CPU iPhone OS 15_8 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/15.8 Mobile/15E148 Safari/604.1"),
+        # Viewport(750, 1334, "iphone-7", 2.0,
+        #          "Mozilla/5.0 (iPhone; CPU iPhone OS 15_8 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/15.8 Mobile/15E148 Safari/604.1"),
+        #
+        # # iPhone 6 Series (2014-2015)
+        # Viewport(1080, 1920, "iphone-6s-plus", 3.0,
+        #          "Mozilla/5.0 (iPhone; CPU iPhone OS 12_5_7 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/12.5.7 Mobile/15E148 Safari/604.1"),
+        # Viewport(750, 1334, "iphone-6s", 2.0,
+        #          "Mozilla/5.0 (iPhone; CPU iPhone OS 12_5_7 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/12.5.7 Mobile/15E148 Safari/604.1"),
+        # Viewport(1080, 1920, "iphone-6-plus", 3.0,
+        #          "Mozilla/5.0 (iPhone; CPU iPhone OS 12_5_7 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/12.5.7 Mobile/15E148 Safari/604.1"),
+        # Viewport(750, 1334, "iphone-6", 2.0,
+        #          "Mozilla/5.0 (iPhone; CPU iPhone OS 12_5_7 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/12.5.7 Mobile/15E148 Safari/604.1"),
+        #
+        # # iPhone 5 Series (2012-2013)
+        # Viewport(640, 1136, "iphone-5s", 2.0,
+        #          "Mozilla/5.0 (iPhone; CPU iPhone OS 12_5_7 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/12.5.7 Mobile/15E148 Safari/604.1"),
+        # Viewport(640, 1136, "iphone-5c", 2.0,
+        #          "Mozilla/5.0 (iPhone; CPU iPhone OS 10_3_3 like Mac OS X) AppleWebKit/603.3.8 (KHTML, like Gecko) Version/10.3.3 Mobile/14G60 Safari/602.1"),
+        # Viewport(640, 1136, "iphone-5", 2.0,
+        #          "Mozilla/5.0 (iPhone; CPU iPhone OS 10_3_3 like Mac OS X) AppleWebKit/603.3.8 (KHTML, like Gecko) Version/10.3.3 Mobile/14G60 Safari/602.1"),
 
-        # Common Design Presentation Formats
-        Viewport(1280, 720, "hd-preview", 1.0,
-                 "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/121.0.0.0 Safari/537.36"),
-        Viewport(1920, 1080, "fullhd-preview", 1.0,
-                 "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/121.0.0.0 Safari/537.36"),
-
-        # Popular Aspect Ratios
-        Viewport(1500, 1000, "3-2-ratio", 1.0,
-                 "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/121.0.0.0 Safari/537.36"),
-        Viewport(1600, 900, "16-9-ratio", 1.0,
-                 "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/121.0.0.0 Safari/537.36"),
-
-        Viewport(2560, 1600, "macbook-air-15", 2.0,
-                 "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/17.2.1 Safari/605.1.15"),
-        Viewport(2304, 1440, "macbook-air-13", 2.0,
-                 "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/17.2.1 Safari/605.1.15"),
-
-        Viewport(2360, 1640, "ipad-air-5", 2.0,
-                 "Mozilla/5.0 (iPad; CPU OS 17_2_1 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/17.2 Mobile/15E148 Safari/604.1"),
-
-        Viewport(1080, 2340, "samsung-a54", 2.5,
-                 "Mozilla/5.0 (Linux; Android 14; SM-A546B) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/121.0.0.0 Mobile Safari/537.36"),
-
-        # Desktop (Most common desktop resolutions in 2024)
-        Viewport(1920, 1080, "desktop-fhd", 1.0,
-                 "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/121.0.0.0 Safari/537.36"),
-        Viewport(2560, 1440, "desktop-2k", 1.5,
-                 "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/121.0.0.0 Safari/537.36"),
-        Viewport(3840, 2160, "desktop-4k", 2.0,
-                 "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/121.0.0.0 Safari/537.36"),
-        Viewport(1366, 768, "desktop-laptop", 1.0,
-                 "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/121.0.0.0 Safari/537.36"),
-        Viewport(1536, 864, "desktop-laptop-hd", 1.25,
-                 "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/121.0.0.0 Safari/537.36"),
-
-        # Apple Devices
-        Viewport(2880, 1800, "macbook-pro-15", 2.0,
-                 "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/17.2.1 Safari/605.1.15"),
-        Viewport(2560, 1600, "macbook-pro-13", 2.0,
-                 "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/17.2.1 Safari/605.1.15"),
-        Viewport(2732, 2048, "ipad-pro-12.9", 2.0,
-                 "Mozilla/5.0 (iPad; CPU OS 17_2_1 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/17.2 Mobile/15E148 Safari/604.1"),
-        Viewport(2388, 1668, "ipad-pro-11", 2.0,
-                 "Mozilla/5.0 (iPad; CPU OS 17_2_1 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/17.2 Mobile/15E148 Safari/604.1"),
-        Viewport(2048, 1536, "ipad-10.9", 2.0,
-                 "Mozilla/5.0 (iPad; CPU OS 17_2_1 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/17.2 Mobile/15E148 Safari/604.1"),
-
-        # Popular Android Tablets
-        Viewport(2560, 1600, "samsung-tab-s9", 1.5,
-                 "Mozilla/5.0 (Linux; Android 14; SM-X710) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/121.0.0.0 Safari/537.36"),
-        Viewport(2000, 1200, "lenovo-tab-p12", 1.5,
-                 "Mozilla/5.0 (Linux; Android 13; Tab P12 Pro) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/121.0.0.0 Safari/537.36"),
-        Viewport(2160, 1620, "xiaomi-pad-6", 1.5,
-                 "Mozilla/5.0 (Linux; Android 13; 23043RP34G) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/121.0.0.0 Safari/537.36"),
-
-        # Modern iPhones (2024-2023)
-        Viewport(1290, 2796, "iphone-15-pro-max", 3.0,
-                 "Mozilla/5.0 (iPhone; CPU iPhone OS 17_2_1 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/17.2 Mobile/15E148 Safari/604.1"),
-        Viewport(1179, 2556, "iphone-15-pro", 3.0,
-                 "Mozilla/5.0 (iPhone; CPU iPhone OS 17_2_1 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/17.2 Mobile/15E148 Safari/604.1"),
-        Viewport(1179, 2556, "iphone-15-plus", 3.0,
-                 "Mozilla/5.0 (iPhone; CPU iPhone OS 17_2_1 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/17.2 Mobile/15E148 Safari/604.1"),
-        Viewport(1170, 2532, "iphone-15", 3.0,
-                 "Mozilla/5.0 (iPhone; CPU iPhone OS 17_2_1 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/17.2 Mobile/15E148 Safari/604.1"),
-
-        # iPhone 14 Series (2022-2023)
-        Viewport(1290, 2796, "iphone-14-pro-max", 3.0,
-                 "Mozilla/5.0 (iPhone; CPU iPhone OS 17_2_1 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/17.2 Mobile/15E148 Safari/604.1"),
-        Viewport(1179, 2556, "iphone-14-pro", 3.0,
-                 "Mozilla/5.0 (iPhone; CPU iPhone OS 17_2_1 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/17.2 Mobile/15E148 Safari/604.1"),
-        Viewport(1284, 2778, "iphone-14-plus", 3.0,
-                 "Mozilla/5.0 (iPhone; CPU iPhone OS 17_2_1 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/17.2 Mobile/15E148 Safari/604.1"),
-        Viewport(1170, 2532, "iphone-14", 3.0,
-                 "Mozilla/5.0 (iPhone; CPU iPhone OS 17_2_1 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/17.2 Mobile/15E148 Safari/604.1"),
-
-        # iPhone 13 Series (2021-2022)
-        Viewport(1284, 2778, "iphone-13-pro-max", 3.0,
-                 "Mozilla/5.0 (iPhone; CPU iPhone OS 17_2_1 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/17.2 Mobile/15E148 Safari/604.1"),
-        Viewport(1170, 2532, "iphone-13-pro", 3.0,
-                 "Mozilla/5.0 (iPhone; CPU iPhone OS 17_2_1 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/17.2 Mobile/15E148 Safari/604.1"),
-        Viewport(1170, 2532, "iphone-13", 3.0,
-                 "Mozilla/5.0 (iPhone; CPU iPhone OS 17_2_1 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/17.2 Mobile/15E148 Safari/604.1"),
-        Viewport(1080, 2340, "iphone-13-mini", 3.0,
-                 "Mozilla/5.0 (iPhone; CPU iPhone OS 17_2_1 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/17.2 Mobile/15E148 Safari/604.1"),
-
-        # iPhone 12 Series (2020-2021)
-        Viewport(1284, 2778, "iphone-12-pro-max", 3.0,
-                 "Mozilla/5.0 (iPhone; CPU iPhone OS 17_2_1 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/17.2 Mobile/15E148 Safari/604.1"),
-        Viewport(1170, 2532, "iphone-12-pro", 3.0,
-                 "Mozilla/5.0 (iPhone; CPU iPhone OS 17_2_1 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/17.2 Mobile/15E148 Safari/604.1"),
-        Viewport(1170, 2532, "iphone-12", 3.0,
-                 "Mozilla/5.0 (iPhone; CPU iPhone OS 17_2_1 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/17.2 Mobile/15E148 Safari/604.1"),
-        Viewport(1080, 2340, "iphone-12-mini", 3.0,
-                 "Mozilla/5.0 (iPhone; CPU iPhone OS 17_2_1 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/17.2 Mobile/15E148 Safari/604.1"),
-
-        # iPhone 11 Series (2019-2020)
-        Viewport(1242, 2688, "iphone-11-pro-max", 3.0,
-                 "Mozilla/5.0 (iPhone; CPU iPhone OS 16_7_2 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/16.7 Mobile/15E148 Safari/604.1"),
-        Viewport(1125, 2436, "iphone-11-pro", 3.0,
-                 "Mozilla/5.0 (iPhone; CPU iPhone OS 16_7_2 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/16.7 Mobile/15E148 Safari/604.1"),
-        Viewport(828, 1792, "iphone-11", 2.0,
-                 "Mozilla/5.0 (iPhone; CPU iPhone OS 16_7_2 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/16.7 Mobile/15E148 Safari/604.1"),
-
-        # iPhone XS/XR Series (2018-2019)
-        Viewport(1242, 2688, "iphone-xs-max", 3.0,
-                 "Mozilla/5.0 (iPhone; CPU iPhone OS 16_7_2 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/16.7 Mobile/15E148 Safari/604.1"),
-        Viewport(1125, 2436, "iphone-xs", 3.0,
-                 "Mozilla/5.0 (iPhone; CPU iPhone OS 16_7_2 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/16.7 Mobile/15E148 Safari/604.1"),
-        Viewport(828, 1792, "iphone-xr", 2.0,
-                 "Mozilla/5.0 (iPhone; CPU iPhone OS 16_7_2 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/16.7 Mobile/15E148 Safari/604.1"),
-
-        # iPhone X (2017-2018)
-        Viewport(1125, 2436, "iphone-x", 3.0,
-                 "Mozilla/5.0 (iPhone; CPU iPhone OS 16_7_2 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/16.7 Mobile/15E148 Safari/604.1"),
-
-        # iPhone 8 Series (2017)
-        Viewport(1080, 1920, "iphone-8-plus", 3.0,
-                 "Mozilla/5.0 (iPhone; CPU iPhone OS 15_8 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/15.8 Mobile/15E148 Safari/604.1"),
-        Viewport(750, 1334, "iphone-8", 2.0,
-                 "Mozilla/5.0 (iPhone; CPU iPhone OS 15_8 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/15.8 Mobile/15E148 Safari/604.1"),
-
-        # iPhone 7 Series (2016)
-        Viewport(1080, 1920, "iphone-7-plus", 3.0,
-                 "Mozilla/5.0 (iPhone; CPU iPhone OS 15_8 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/15.8 Mobile/15E148 Safari/604.1"),
-        Viewport(750, 1334, "iphone-7", 2.0,
-                 "Mozilla/5.0 (iPhone; CPU iPhone OS 15_8 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/15.8 Mobile/15E148 Safari/604.1"),
-
-        # iPhone 6 Series (2014-2015)
-        Viewport(1080, 1920, "iphone-6s-plus", 3.0,
-                 "Mozilla/5.0 (iPhone; CPU iPhone OS 12_5_7 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/12.5.7 Mobile/15E148 Safari/604.1"),
-        Viewport(750, 1334, "iphone-6s", 2.0,
-                 "Mozilla/5.0 (iPhone; CPU iPhone OS 12_5_7 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/12.5.7 Mobile/15E148 Safari/604.1"),
-        Viewport(1080, 1920, "iphone-6-plus", 3.0,
-                 "Mozilla/5.0 (iPhone; CPU iPhone OS 12_5_7 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/12.5.7 Mobile/15E148 Safari/604.1"),
-        Viewport(750, 1334, "iphone-6", 2.0,
-                 "Mozilla/5.0 (iPhone; CPU iPhone OS 12_5_7 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/12.5.7 Mobile/15E148 Safari/604.1"),
-
-        # iPhone 5 Series (2012-2013)
-        Viewport(640, 1136, "iphone-5s", 2.0,
-                 "Mozilla/5.0 (iPhone; CPU iPhone OS 12_5_7 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/12.5.7 Mobile/15E148 Safari/604.1"),
-        Viewport(640, 1136, "iphone-5c", 2.0,
-                 "Mozilla/5.0 (iPhone; CPU iPhone OS 10_3_3 like Mac OS X) AppleWebKit/603.3.8 (KHTML, like Gecko) Version/10.3.3 Mobile/14G60 Safari/602.1"),
-        Viewport(640, 1136, "iphone-5", 2.0,
-                 "Mozilla/5.0 (iPhone; CPU iPhone OS 10_3_3 like Mac OS X) AppleWebKit/603.3.8 (KHTML, like Gecko) Version/10.3.3 Mobile/14G60 Safari/602.1"),
         # POCO Phones (2024-2023)
-        Viewport(1220, 2712, "poco-x6-pro", 3.0,  # Released January 2024
+        Viewport(1220, 2712, "poco-x6-pro", 3.0,
                  "Mozilla/5.0 (Linux; Android 14; 23113RKC6G) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/121.0.0.0 Mobile Safari/537.36"),
-        Viewport(1080, 2400, "poco-x6", 2.5,  # Released January 2024
+        Viewport(1080, 2400, "poco-x6", 2.5,
                  "Mozilla/5.0 (Linux; Android 14; 23122PCD1G) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/121.0.0.0 Mobile Safari/537.36"),
-        Viewport(1080, 2460, "poco-m6-pro", 2.5,  # Released August 2023
+        Viewport(1080, 2460, "poco-m6-pro", 2.5,
                  "Mozilla/5.0 (Linux; Android 13; 23053RN02A) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/121.0.0.0 Mobile Safari/537.36"),
-        Viewport(1080, 2400, "poco-m6", 2.5,  # Released September 2023
+        Viewport(1080, 2400, "poco-m6", 2.5,
                  "Mozilla/5.0 (Linux; Android 13; 23053RN02A) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/121.0.0.0 Mobile Safari/537.36"),
-        Viewport(1080, 2400, "poco-m5s", 2.5,  # Released March 2023
+        Viewport(1080, 2400, "poco-m5s", 2.5,
                  "Mozilla/5.0 (Linux; Android 13; 22031116BG) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/121.0.0.0 Mobile Safari/537.36"),
-        Viewport(1080, 2400, "poco-f5-pro", 2.5,  # Released May 2023
+        Viewport(1080, 2400, "poco-f5-pro", 2.5,
                  "Mozilla/5.0 (Linux; Android 13; 23013PC75G) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/121.0.0.0 Mobile Safari/537.36"),
-        Viewport(1080, 2400, "poco-f5", 2.5,  # Released May 2023
+        Viewport(1080, 2400, "poco-f5", 2.5,
                  "Mozilla/5.0 (Linux; Android 13; 23049PCD8G) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/121.0.0.0 Mobile Safari/537.36"),
-        Viewport(1220, 2712, "poco-x5-pro", 3.0,  # Released February 2023
+        Viewport(1220, 2712, "poco-x5-pro", 3.0,
                  "Mozilla/5.0 (Linux; Android 13; 22101320G) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/121.0.0.0 Mobile Safari/537.36"),
-        Viewport(1080, 2400, "poco-x5", 2.5,  # Released February 2023
+        Viewport(1080, 2400, "poco-x5", 2.5,
                  "Mozilla/5.0 (Linux; Android 13; 22111317PG) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/121.0.0.0 Mobile Safari/537.36"),
-        # Popular Smartphones
-        Viewport(1440, 3088, "samsung-s24-ultra", 3.0,
-                 "Mozilla/5.0 (Linux; Android 14; SM-S928B) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/121.0.0.0 Mobile Safari/537.36"),
-        Viewport(1080, 2340, "samsung-s24", 2.5,
-                 "Mozilla/5.0 (Linux; Android 14; SM-S921B) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/121.0.0.0 Mobile Safari/537.36"),
-        Viewport(1080, 2400, "pixel-8-pro", 2.5,
-                 "Mozilla/5.0 (Linux; Android 14; Pixel 8 Pro) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/121.0.0.0 Mobile Safari/537.36"),
-        Viewport(1080, 2400, "oneplus-12", 2.5,
-                 "Mozilla/5.0 (Linux; Android 14; CPH2573) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/121.0.0.0 Mobile Safari/537.36")
-    ]
 
-    def __init__(self, output_dir: str, max_workers: int = 3):
+        # # Popular Smartphones
+        # Viewport(1440, 3088, "samsung-s24-ultra", 3.0,
+        #          "Mozilla/5.0 (Linux; Android 14; SM-S928B) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/121.0.0.0 Mobile Safari/537.36"),
+        # Viewport(1080, 2340, "samsung-s24", 2.5,
+        #          "Mozilla/5.0 (Linux; Android 14; SM-S921B) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/121.0.0.0 Mobile Safari/537.36"),
+        # Viewport(1080, 2400, "pixel-8-pro", 2.5,
+        #          "Mozilla/5.0 (Linux; Android 14; Pixel 8 Pro) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/121.0.0.0 Mobile Safari/537.36"),
+        # Viewport(1080, 2400, "oneplus-12", 2.5,
+        #          "Mozilla/5.0 (Linux; Android 14; CPH2573) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/121.0.0.0 Mobile Safari/537.36")
+    ]
+    def __init__(self, output_dir: str, max_workers: int = 3, simulate_browser_ui: bool = True):
         self.output_dir = output_dir
         self.max_workers = max_workers
+        self.simulate_browser_ui = simulate_browser_ui
+
         self.setup_logging()
 
         # Create output directory if it doesn't exist
@@ -312,12 +315,23 @@ class WebsiteScreenshotter:
         Возвращает True если контент обнаружен, False если скриншот пустой/белый
         """
         with Image.open(image_path) as img:
+            # Get UI heights for cropping
+            browser_ui_height = {
+                'search_bar': 56,
+                'bottom_nav': 48
+            }
+
             # Конвертируем в RGB если изображение в другом формате
             if img.mode != 'RGB':
                 img = img.convert('RGB')
 
+            # Crop out UI areas for content check
+            content_area = img.crop((0, browser_ui_height['search_bar'],
+                                     img.width,
+                                     img.height - browser_ui_height['bottom_nav']))
+
             # Уменьшаем изображение для быстрого анализа
-            thumb = img.resize((100, 100))
+            thumb = content_area.resize((100, 100))
 
             # Получаем все цвета и их количество
             pixels = thumb.getcolors(10000)
@@ -376,6 +390,15 @@ class WebsiteScreenshotter:
                 driver.set_page_load_timeout(30)
                 driver.set_script_timeout(30)
 
+                # Add extra height for browser UI elements
+                browser_ui_height = {
+                    'status_bar': 20 if 'iphone' in viewport.name.lower() else 24,  # iOS: 20, Android: 24
+                    'search_bar': 56,  # Browser search bar height
+                    'bottom_nav': 48  # Bottom navigation height
+                }
+                total_ui_height = browser_ui_height['status_bar'] + browser_ui_height['search_bar'] + browser_ui_height[
+                    'bottom_nav']
+
                 # Calculate physical pixels
                 physical_width = int(viewport.width / viewport.dpr)
                 physical_height = int(viewport.height / viewport.dpr)
@@ -383,38 +406,187 @@ class WebsiteScreenshotter:
                 # Set viewport size with additional padding
                 driver.set_window_size(physical_width + 100, physical_height + 100)
 
-                # Set device pixel ratio and mobile emulation
+                # Configure device metrics
                 driver.execute_cdp_cmd('Emulation.setDeviceMetricsOverride', {
                     'width': physical_width,
                     'height': physical_height,
                     'deviceScaleFactor': viewport.dpr,
-                    'mobile': 'mobile' in viewport.name.lower() or 'iphone' in viewport.name.lower()
+                    'mobile': 'mobile' in viewport.name.lower() or 'iphone' in viewport.name.lower(),
+                    'screenOrientation': {
+                        'type': 'portraitPrimary',
+                        'angle': 0
+                    }
                 })
-
                 driver.get(url)
 
                 # Enhanced waiting for modern frameworks
                 self.wait_for_page_load(driver, viewport)
                 self.inject_hydration_handling(driver)
 
-                # Inject CSS to hide scrollbars
+                # Inject browser UI elements
                 driver.execute_script("""
+                   // Status bar height based on platform
+                   const statusBarHeight = navigator.userAgent.toLowerCase().includes('iphone') ? '20px' : '24px';
+
+                   // Create status bar 
+                   const statusBar = document.createElement('div');
+                   statusBar.style.cssText = `
+                       position: fixed;
+                       top: 0;
+                       left: 0;
+                       right: 0;
+                       height: ${statusBarHeight};
+                       background: #000000;
+                       z-index: 10000;
+                       display: flex;
+                       justify-content: space-between;
+                       align-items: center;
+                       padding: 0 16px;
+                       color: #fff;
+                       font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+                       font-size: 12px;
+                   `;
+
+                   // Left side of status bar (time)  
+                   const statusBarLeft = document.createElement('div');
+                   statusBarLeft.textContent = '5:52';
+
+                   // Center of status bar (notch area/camera)
+                   const statusBarCenter = document.createElement('div');
+                   statusBarCenter.style.cssText = `
+                       width: 80px;
+                       height: ${statusBarHeight};
+                       background: #000000;
+                   `;
+
+                   // Right side of status bar (battery, wifi, etc)
+                   const statusBarRight = document.createElement('div');
+                   statusBarRight.style.cssText = `
+                       display: flex;
+                       gap: 4px;
+                       align-items: center;
+                   `;
+                   statusBarRight.innerHTML = '🔋 74% 📶 ⚡';
+
+                   // Assemble status bar
+                   statusBar.appendChild(statusBarLeft);
+                   statusBar.appendChild(statusBarCenter);
+                   statusBar.appendChild(statusBarRight);
+
+                   // Create browser UI container
+                   const browserUI = document.createElement('div');
+                   browserUI.style.cssText = `
+                       position: fixed;
+                       top: ${statusBarHeight};
+                       left: 0;
+                       right: 0;
+                       height: 56px;
+                       background: #2A2A2A;
+                       z-index: 9999;
+                       display: flex;
+                       align-items: center;
+                       padding: 0 16px;
+                       font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+                   `;
+
+                   // Create browser controls (left)
+                   const browserControls = document.createElement('div');
+                   browserControls.style.cssText = `
+                       display: flex;
+                       align-items: center;
+                       gap: 8px;
+                   `;
+
+                   // Add lock icon
+                   const lockIcon = document.createElement('span');
+                   lockIcon.innerHTML = '🔒';
+                   lockIcon.style.fontSize = '16px';
+
+                   // Create search bar
+                   const searchBar = document.createElement('div');
+                   searchBar.style.cssText = `
+                       flex: 1;
+                       height: 36px;
+                       background: #3A3A3A;
+                       border-radius: 18px;
+                       margin: 0 8px;
+                       display: flex;
+                       align-items: center;
+                       padding: 0 16px;
+                       color: #fff;
+                       font-size: 14px;
+                   `;
+                   searchBar.textContent = window.location.hostname;
+
+                   // Create browser actions (right)
+                   const browserActions = document.createElement('div');
+                   browserActions.style.cssText = `
+                       display: flex;
+                       align-items: center;
+                       gap: 16px;
+                   `;
+                   browserActions.innerHTML = '⋮';
+
+                   // Create bottom navigation
+                   const bottomNav = document.createElement('div');
+                   bottomNav.style.cssText = `
+                       position: fixed;
+                       bottom: 0;
+                       left: 0;
+                       right: 0;
+                       height: 48px;
+                       background: #000;
+                       display: flex;
+                       justify-content: space-around;
+                       align-items: center;
+                       z-index: 9999;
+                       padding: 0 16px;
+                   `;
+
+                   // Add navigation buttons
+                   const navButtons = ['←', '→', '↓', '⌂', '⊡'];
+                   navButtons.forEach(button => {
+                       const navButton = document.createElement('button');
+                       navButton.style.cssText = `
+                           background: none;
+                           border: none;
+                           color: #fff;
+                           font-size: 20px;
+                           padding: 8px;
+                           cursor: pointer;
+                       `;
+                       navButton.textContent = button;
+                       bottomNav.appendChild(navButton);
+                   });
+
+                   // Assemble browser UI
+                   browserControls.appendChild(lockIcon);
+                   browserUI.appendChild(browserControls);
+                   browserUI.appendChild(searchBar);
+                   browserUI.appendChild(browserActions);
+
+                   // Add UI elements to page
+                   document.body.appendChild(statusBar);
+                   document.body.appendChild(browserUI);
+                   document.body.appendChild(bottomNav);
+
+                   // Adjust content padding
+                   document.body.style.paddingTop = navigator.userAgent.toLowerCase().includes('iphone') ? '76px' : '80px';
+                   document.body.style.paddingBottom = '48px';
+
+                   // Hide scrollbars
                    document.documentElement.style.overflow = 'hidden';
                    document.body.style.overflow = 'hidden';
 
-                   // Hide WebKit scrollbars
-                   document.documentElement.style.setProperty(
-                       '::-webkit-scrollbar', 
-                       'display: none', 
-                       'important'
-                   );
-
                    // Add CSS for Firefox and other browsers
-                   var style = document.createElement('style');
+                   const style = document.createElement('style');
                    style.textContent = `
                        * {
                            scrollbar-width: none !important;
                            -ms-overflow-style: none !important;
+                       }
+                       ::-webkit-scrollbar {
+                           display: none !important;
                        }
                    `;
                    document.head.appendChild(style);
@@ -471,12 +643,12 @@ class WebsiteScreenshotter:
                         driver.quit()
                     except:
                         pass
-                # Clean up temp file
-                if temp_screenshot and os.path.exists(temp_screenshot):
-                    try:
-                        os.remove(temp_screenshot)
-                    except:
-                        pass
+                    # Clean up temp file
+                    if temp_screenshot and os.path.exists(temp_screenshot):
+                        try:
+                            os.remove(temp_screenshot)
+                        except:
+                            pass
 
     def verify_page_content(self, driver: webdriver.Chrome) -> bool:
         """Verify that the page has loaded meaningful content"""
