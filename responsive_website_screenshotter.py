@@ -390,21 +390,21 @@ class WebsiteScreenshotter:
                 driver.set_page_load_timeout(30)
                 driver.set_script_timeout(30)
 
-                # Add extra height for browser UI elements
+                # Calculate base physical pixels
+                physical_width = int(viewport.width / viewport.dpr)
+                physical_height = int(viewport.height / viewport.dpr)
+
+                # Add UI heights in actual pixels (not scaled)
                 browser_ui_height = {
-                    'status_bar': 20 if 'iphone' in viewport.name.lower() else 24,  # iOS: 20, Android: 24
-                    'search_bar': 56,  # Browser search bar height
-                    'bottom_nav': 48  # Bottom navigation height
+                    'status_bar': 20 if 'iphone' in viewport.name.lower() else 24,
+                    'search_bar': 56,
+                    'bottom_nav': 48
                 }
                 total_ui_height = browser_ui_height['status_bar'] + browser_ui_height['search_bar'] + browser_ui_height[
                     'bottom_nav']
 
-                # Calculate physical pixels
-                physical_width = int(viewport.width / viewport.dpr)
-                physical_height = int(viewport.height / viewport.dpr)
-
-                # Set viewport size with additional padding
-                driver.set_window_size(physical_width + 100, physical_height + 100)
+                # Set viewport size
+                driver.set_window_size(physical_width, physical_height)
 
                 # Configure device metrics
                 driver.execute_cdp_cmd('Emulation.setDeviceMetricsOverride', {
@@ -417,6 +417,7 @@ class WebsiteScreenshotter:
                         'angle': 0
                     }
                 })
+
                 driver.get(url)
 
                 # Enhanced waiting for modern frameworks
@@ -427,8 +428,10 @@ class WebsiteScreenshotter:
                 driver.execute_script("""
                    // Status bar height based on platform
                    const statusBarHeight = navigator.userAgent.toLowerCase().includes('iphone') ? '20px' : '24px';
+                   const searchBarHeight = '56px';
+                   const bottomNavHeight = '48px';
 
-                   // Create status bar 
+                   // Create status bar
                    const statusBar = document.createElement('div');
                    statusBar.style.cssText = `
                        position: fixed;
@@ -447,7 +450,7 @@ class WebsiteScreenshotter:
                        font-size: 12px;
                    `;
 
-                   // Left side of status bar (time)  
+                   // Left side of status bar (time)
                    const statusBarLeft = document.createElement('div');
                    statusBarLeft.textContent = '5:52';
 
@@ -468,11 +471,6 @@ class WebsiteScreenshotter:
                    `;
                    statusBarRight.innerHTML = '🔋 74% 📶 ⚡';
 
-                   // Assemble status bar
-                   statusBar.appendChild(statusBarLeft);
-                   statusBar.appendChild(statusBarCenter);
-                   statusBar.appendChild(statusBarRight);
-
                    // Create browser UI container
                    const browserUI = document.createElement('div');
                    browserUI.style.cssText = `
@@ -480,7 +478,7 @@ class WebsiteScreenshotter:
                        top: ${statusBarHeight};
                        left: 0;
                        right: 0;
-                       height: 56px;
+                       height: ${searchBarHeight};
                        background: #2A2A2A;
                        z-index: 9999;
                        display: flex;
@@ -534,7 +532,7 @@ class WebsiteScreenshotter:
                        bottom: 0;
                        left: 0;
                        right: 0;
-                       height: 48px;
+                       height: ${bottomNavHeight};
                        background: #000;
                        display: flex;
                        justify-content: space-around;
@@ -565,14 +563,30 @@ class WebsiteScreenshotter:
                    browserUI.appendChild(searchBar);
                    browserUI.appendChild(browserActions);
 
+                   // Assemble status bar
+                   statusBar.appendChild(statusBarLeft);
+                   statusBar.appendChild(statusBarCenter);
+                   statusBar.appendChild(statusBarRight);
+
+                   // Wrap all existing body content in a container
+                   const content = document.createElement('div');
+                   while (document.body.firstChild) {
+                       content.appendChild(document.body.firstChild);
+                   }
+                   document.body.appendChild(content);
+
                    // Add UI elements to page
                    document.body.appendChild(statusBar);
                    document.body.appendChild(browserUI);
                    document.body.appendChild(bottomNav);
 
-                   // Adjust content padding
-                   document.body.style.paddingTop = navigator.userAgent.toLowerCase().includes('iphone') ? '76px' : '80px';
-                   document.body.style.paddingBottom = '48px';
+                   // Position content below UI
+                   content.style.cssText = `
+                       position: relative;
+                       top: calc(${statusBarHeight} + ${searchBarHeight});
+                       margin-bottom: calc(${bottomNavHeight} + 20px);
+                       min-height: calc(100vh - ${statusBarHeight} - ${searchBarHeight} - ${bottomNavHeight});
+                   `;
 
                    // Hide scrollbars
                    document.documentElement.style.overflow = 'hidden';
@@ -590,6 +604,9 @@ class WebsiteScreenshotter:
                        }
                    `;
                    document.head.appendChild(style);
+
+                   // Force layout recalculation
+                   document.body.offsetHeight;
                """)
 
                 # Wait for any remaining dynamic content
